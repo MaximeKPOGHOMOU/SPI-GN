@@ -16,13 +16,25 @@
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
+              "src/assets",
+              "src/favicon.ico",
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "src/assets/doc",
+                "output": "/assets/doc/"
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/assets/css/bootstrap.css",
+              "src/custom-theme.scss",
+              "src/assets/css/responsive.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+              "src/assets/css/style.css"
+            ],
+            "scripts": [
+              "src/assets/js/bootstrap.js",
+              "src/assets/js/jquery-3.4.1.min.js",
+              "src/assets/js/custom.js"
             ]
           },
           "configurations": {
@@ -81,5 +93,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "f7c55602-ae76-45f3-84ab-9319393ad40e"
   }
 }
