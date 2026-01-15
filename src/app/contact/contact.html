@@ -1,5 +1,5 @@
 <!-- contact section -->
-
+<app-header></app-header>
 <section class="contact_section layout_padding">
     <div class="contact_bg_box">
         <div class="img-box">
@@ -46,23 +46,6 @@
                         </div>
                     </form>
 
-                  <!-- Toast Bootstrap -->
-                <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 2000;">
-                    <div id="formToast" class="toast align-items-center text-white bg-success border-0"
-                        data-bs-autohide="true" data-bs-delay="3000" role="alert" aria-live="assertive"
-                        aria-atomic="true" style="min-width: 300px;">
-                        <div class="d-flex">
-                            <div class="toast-body">
-                                Message envoyé avec succès
-                            </div>
-                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                                aria-label="Fermer"></button>
-                        </div>
-                        <div class="progress toast-progress" style="height: 3px;">
-                            <div class="progress-bar bg-primary" id="toastProgressBar" role="progressbar"></div>
-                        </div>
-                    </div>
-                </div>
                 </div>
             </div>
         </div>
@@ -70,103 +53,5 @@
 </section>
 
 <!-- end contact section -->
+<app-info></app-info>
 
-<!-- info section -->
-<section class="info_section ">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="info_logo">
-                    <a class="navbar-brand" href="index.html">
-                        <span>
-                            SPI-GN
-                        </span>
-                    </a>
-                    <p>
-                        SPI-Guinée : sécurité, vidéosurveillance, géolocalisation et contrôle d’accès.
-                    </p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="info_links">
-                    <h5>Lien</h5>
-                    <ul>
-                        <li>
-                            <a [routerLink]="['/home']">Accueil</a>
-                        </li>
-                        <li>
-                            <a [routerLink]="['/about']">À propos</a>
-                        </li>
-                        <li>
-                            <a [routerLink]="['/services']">Nos services</a>
-                        </li>
-                        <li>
-                            <a [routerLink]="['/clients']">Nos clients</a>
-                        </li>
-                        <li>
-                            <a [routerLink]="['/contact']">Contact</a>
-                        </li>
-                    </ul>
-
-
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="info_info">
-                    <h5>
-                        Contactez-nous
-                    </h5>
-                </div>
-                <div class="info_contact">
-                    <a href="" class="">
-                        <i class="fa fa-map-marker" aria-hidden="true"></i>
-                        <span>
-                            C-Ratoma, Kipé-kakimbo
-                        </span>
-                    </a>
-                    <a href="" class="">
-                        <i class="fa fa-phone" aria-hidden="true"></i>
-                        <span>
-                            +224 610 00 85 00
-                        </span>
-                    </a>
-                    <a href="" class="">
-                        <i class="fa fa-envelope" aria-hidden="true"></i>
-                        <span>
-                            Contact@spi-gn.com
-                        </span>
-                    </a>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="info_form ">
-                    <h5>
-                        Restez informés
-                    </h5>
-                    <form action="#">
-                        <input type="email" placeholder="Entrez votre email">
-                        <button>
-                            S'inscrire
-                        </button>
-                    </form>
-                    <div class="social_box">
-                        <a href="">
-                            <i class="fa fa-facebook" aria-hidden="true"></i>
-                        </a>
-                        <a href="">
-                            <i class="fa fa-twitter" aria-hidden="true"></i>
-                        </a>
-                        <a href="">
-                            <i class="fa fa-youtube" aria-hidden="true"></i>
-                        </a>
-                        <a href="">
-                            <i class="fa fa-instagram" aria-hidden="true"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- end info_section -->

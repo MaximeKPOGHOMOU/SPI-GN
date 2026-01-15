@@ -1,0 +1,10 @@
+.info_links {
+  display: flex;
+  flex-direction: column; /* empile verticalement logo + texte */
+  align-items: flex-start; /* logo et texte alignés à gauche */
+}
+
+.info_links .logo {
+  margin-bottom: 15px; /* espace entre logo et texte */
+  background-color: white;
+}

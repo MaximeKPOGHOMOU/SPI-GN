@@ -1,27 +1,27 @@
-
-import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-
-
-declare var bootstrap: any;
+import { CommonModule } from '@angular/common';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { Info } from "../info/info";
+import { Header } from "../header/header";
 
 @Component({
   selector: 'app-contact',
-  imports: [RouterModule, FormsModule, CommonModule ],
+  standalone: true,
+  imports: [RouterModule, FormsModule, CommonModule, Info, MatSnackBarModule, Header],
   templateUrl: './contact.html',
-  styleUrl: './contact.css'
+  styleUrls: ['./contact.css']
 })
 export class Contact implements OnInit {
-
-   @ViewChild('formToast') toastElRef!: ElementRef;
 
   form = { name: '', email: '', subject: '', message: '' };
   loading = false;
 
-  constructor(private cd: ChangeDetectorRef) { }
+  constructor(
+    private cd: ChangeDetectorRef,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.resetForm();
@@ -38,7 +38,9 @@ export class Contact implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    if (!this.form.name.trim() || !this.form.email.trim() || !this.form.subject.trim() || !this.form.message.trim()) {
+
+    if (!this.form.name.trim() || !this.form.email.trim() ||
+        !this.form.subject.trim() || !this.form.message.trim()) {
       this.showToast("Veuillez remplir tous les champs", 'error');
       return;
     }
@@ -56,50 +58,43 @@ export class Contact implements OnInit {
     formData.append('subject', this.form.subject);
     formData.append('message', this.form.message);
 
-    fetch('https://formsubmit.co/ajax/contact@spi-gn.com', {
+    fetch('https://formsubmit.co/ajax/maximekpoghomou18@gmail.com', {
       method: 'POST',
       headers: { 'Accept': 'application/json' },
       body: formData
     })
-      .then(response => {
-        if (response.ok) {
-          form.resetForm();
-          this.showToast('Message envoyé avec succès', 'success');
-        } else {
-          this.showToast("Erreur lors de l'envoi", 'error');
-        }
-      })
-      .catch(() => this.showToast("Échec de connexion. Vérifiez votre Internet.", 'error'))
-      .finally(() => {
-        this.loading = false;
-        this.cd.detectChanges();
-      });
+    .then(response => {
+      if (response.ok) {
+        form.resetForm();
+        this.showToast('Message envoyé avec succès', 'success');
+      } else {
+        this.showToast("Erreur lors de l'envoi", 'error');
+      }
+    })
+    .catch(() => {
+      this.showToast("Échec de connexion. Vérifiez votre Internet.", 'error');
+    })
+    .finally(() => {
+      this.loading = false;
+      this.cd.detectChanges();
+    });
   }
 
+  // ==============================
+  // 🔔 SNACKBAR ANGULAR MATERIAL
+  // ==============================
 showToast(message: string, type: 'success' | 'error' = 'success') {
-  const toastEl = document.getElementById('formToast');
-  if (toastEl) {
-    const toastBody = toastEl.querySelector('.toast-body') as HTMLElement | null;
-    const progressBar = toastEl.querySelector('.progress-bar') as HTMLElement | null;
-
-    //  Change la couleur du fond du toast
-    toastEl.classList.remove('bg-success', 'bg-danger');
-    toastEl.classList.add(type === 'success' ? 'bg-success' : 'bg-danger');
-
-    if (toastBody) toastBody.textContent = message;
-
-    if (progressBar) {
-      progressBar.style.width = '100%';
-      progressBar.style.transition = 'width 3s linear';
-      progressBar.style.transformOrigin = 'right';
-
-      setTimeout(() => {
-        progressBar.style.width = '0%';
-      }, 50);
-    }
-
-    const toast = new bootstrap.Toast(toastEl);
-    toast.show();
-  }
+  this.snackBar.open(message, 'OK', {
+    duration: 3000,
+    horizontalPosition: 'right',
+    verticalPosition: 'top',
+    panelClass: type === 'success'
+      ? ['snackbar-success']
+      : ['snackbar-error']
+  });
+  
 }
+
+
+
 }

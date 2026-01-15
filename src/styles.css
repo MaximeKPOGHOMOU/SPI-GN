@@ -1,1 +1,26 @@
-/* You can add global styles to this file, and also import other style files */
+/* ==== SNACKBAR SUCCESS ==== */
+.mat-mdc-snack-bar-container.snackbar-success {
+  background-color: #2e7d32 !important;   /* vert */
+  color: #ffffff !important;
+}
+
+/* ==== SNACKBAR ERROR ==== */
+.mat-mdc-snack-bar-container.snackbar-error {
+  background-color: #c62828 !important;   /* rouge */
+  color: #ffffff !important;
+}
+body, html {
+    margin: 0;
+    padding: 0;
+}
+
+header.header_section {
+    margin: 0;
+    padding: 0;
+}
+
+.hero_area {
+    margin: 0;
+    padding: 0;
+}
+

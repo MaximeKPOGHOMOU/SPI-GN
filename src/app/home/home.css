@@ -1,0 +1,109 @@
+.team_section .img-box {
+  width: 100%;
+  height: 400px;      /* tu peux ajuster */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;   /* fond si l’image ne remplit pas tout */
+}
+
+
+/* Autorise le retour à la ligne */
+.detail-box h1 {
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.2;
+}
+
+/* Version mobile */
+@media (max-width: 768px) {
+  .detail-box h1 {
+    font-size: 28px;     /* réduit la taille */
+  }
+
+  .detail-box p {
+    font-size: 14px;
+  }
+}
+/* Container des points (indicators) */
+.indicator_container {
+  margin: 0;
+  text-align: center;          /* centre les points horizontalement */
+  position: absolute;          /* position absolue par rapport au carousel */
+  bottom: 20px;                /* distance par rapport au bas du carousel */
+  left: 50%;                   /* centre horizontal */
+  transform: translateX(-50%); /* ajuste le centrage exact */
+  z-index: 10;
+}
+
+/* Responsive pour mobile : mettre les points sous les boutons */
+@media (max-width: 768px) {
+  .indicator_container {
+    position: relative;         /* reste dans le flux */
+    margin: 25px auto 0 auto;   /* centré horizontalement sous les boutons */
+    text-align: center;          /* centre les points */
+    width: 100%;                 /* prend toute la largeur pour ne pas disparaître */
+    z-index: 10;
+  }
+
+  /* Agrandir et forcer l'affichage des points */
+  .indicator_container .carousel-indicators {
+    display: flex !important;    /* assure l'affichage */
+    justify-content: center;     /* centre horizontalement */
+    padding: 0;
+    margin: 0;
+  }
+
+
+  /* Centrer les boutons */
+  .btn-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    margin-top: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Image pleine largeur */
+  .about_section .col-md-6:first-child {
+    flex: 0 0 100%;   /* colonne pleine largeur */
+    max-width: 100%;
+    margin-left: 0;   /* pas de décalage pour l'image */
+    padding: 0;       /* supprime padding */
+  }
+
+  /* Texte colonne */
+  .about_section .col-md-6:last-child {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-left: 40px; /* décalage uniquement pour le texte */
+
+  }
+
+  /* Boutons alignés à gauche sous le texte */
+  .about_section .btn-box {
+    display: flex;
+    flex-direction: column; /* boutons en colonne */
+    gap: 10px;
+    align-items: flex-start; /* boutons alignés à gauche */
+    margin-top: 15px;
+  }
+
+  /* Image responsive */
+  .about_section .img-box img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .about_section .heading_container h2 {
+    font-size: 24px;   /* taille adaptée aux petits écrans */
+    line-height: 1.2;  /* espace entre lignes */
+    text-align: left;  /* tu peux changer en center si tu veux */
+  }
+}
+
+
+

@@ -26,14 +26,14 @@
             ],
             "styles": [
               "src/assets/css/bootstrap.css",
-              "src/custom-theme.scss",
               "src/assets/css/responsive.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-              "src/assets/css/style.css"
+              "src/assets/css/style.css",
+              "src/styles.css" 
             ],
             "scripts": [
               "src/assets/js/bootstrap.js",
-              "src/assets/js/jquery-3.4.1.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
               "src/assets/js/custom.js"
             ]
           },
