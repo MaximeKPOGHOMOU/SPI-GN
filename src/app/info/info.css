@@ -8,3 +8,20 @@
   margin-bottom: 15px; /* espace entre logo et texte */
   background-color: white;
 }
+/* Pour les petits écrans */
+@media (max-width: 768px) {
+  .info_links {
+    display: flex;
+    flex-direction: column;  /* empile verticalement logo + texte */
+    align-items: center;     /* centre le contenu horizontalement */
+    text-align: center;      /* centre aussi le texte */
+  }
+
+  .info_links .logo {
+    margin-bottom: 15px;    /* espace entre logo et texte */
+  }
+
+  .info_links p {
+    text-align: center;      /* centre le paragraphe sous le logo */
+  }
+}
