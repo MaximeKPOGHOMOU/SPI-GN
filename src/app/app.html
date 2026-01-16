@@ -1,2 +1,11 @@
 <router-outlet></router-outlet>
 <app-footer></app-footer>
+
+<button
+  class="scroll-top-btn"
+  *ngIf="showScrollBtn"
+  (click)="scrollToTop()">
+  <i class="fa fa-angle-up"></i> <!-- flèche Font Awesome -->
+</button>
+
+

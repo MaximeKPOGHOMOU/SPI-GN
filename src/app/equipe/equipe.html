@@ -1,0 +1,71 @@
+<app-header></app-header>
+
+<div class="hero_bg_box">
+    <div class="img-box">
+        <img src="assets/images/hero-bg.jpg" alt="">
+    </div>
+</div>
+<!-- team section -->
+
+<!-- about section -->
+<section class="about_section layout_padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 ">
+                <div class="img_container">
+                    <div class="img-box">
+                        <img src="assets/images/dg.jpg" alt="" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 px-0">
+                <div class="detail-box">
+                    <div class="heading_container ">
+                        <h2>
+                            Sékou SOUMAHORO
+                        </h2>
+                    </div>
+                    <p>
+                        En tant que PDG de SPI-GN, je guide notre équipe pour bâtir un monde plus sûr et sécurisé pour nos clients. Nous offrons des solutions complètes en sécurité et gardiennage, tracking GPS, caméras de surveillance, sécurité incendie et gestion du temps par empreinte digitale. Notre engagement : l’excellence, l’innovation et la qualité pour garantir la tranquillité d’esprit de nos clients et dépasser leurs attentes avec des solutions fiables et novatrices.
+                    </p>
+                    <div class="btn-box">
+                        <a href="javascript:void(0)">
+                            Président directeur général
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="team_section layout_padding">
+  <div class="container">
+    <div class="heading_container heading_center">
+      <h2>Notre équipe</h2>
+      <p>SPI-GN met à votre disposition une équipe de professionnels qualifiés.</p>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 col-sm-6 mx-auto" *ngFor="let member of getDisplayedGuards()">
+        <div class="box">
+          <div class="img-box">
+            <img [src]="member.image" [alt]="member.name">
+          </div>
+          <div class="detail-box">
+            <h5>{{ member.name }}</h5>
+            <h6>{{ member.role }}</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-box" *ngIf="guards.length > initialLimit">
+      <a href="javascript:void(0)" (click)="toggleShowAll()">
+        {{ showAll ? 'Voir moins' : 'Voir plus' }}
+      </a>
+    </div>
+  </div>
+</section>
+ <app-info></app-info>

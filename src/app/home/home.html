@@ -1,88 +1,52 @@
 <div class="hero_area">
   <app-header></app-header>
   <section class="slider_section">
-    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-7">
-                <div class="detail-box">
-                  <h1>Sécurité & Gardiennage <br><span>Protection 24/7</span></h1>
-                  <p>Nos agents qualifiés assurent la sécurité de vos biens et locaux, pour une surveillance constante
-                    et fiable.</p>
-                  <div class="btn-box">
-                    <a href="" class="btn-1">Lire plus</a>
-                    <a href="" class="btn-2">Devis</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-7">
-                <div class="detail-box">
-                  <h1>Vidéosurveillance <br><span>Sécurité Électronique</span></h1>
-                  <p>Nous installons des systèmes de caméras modernes pour surveiller vos locaux et protéger vos espaces
-                    stratégiques.</p>
-                  <div class="btn-box">
-                    <a href="" class="btn-1">Lire plus</a>
-                    <a href="" class="btn-2">Devis</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-7">
-                <div class="detail-box">
-                  <h1>Suivi GPS <br><span>Gestion et Traçabilité</span></h1>
-                  <p>Nous proposons des solutions GPS pour vos véhicules et équipements, permettant un suivi précis et
-                    en temps réel.</p>
-                  <div class="btn-box">
-                    <a href="" class="btn-1">Lire plus</a>
-                    <a href="" class="btn-2">Devis</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-7">
-                <div class="detail-box">
-                  <h1>Sécurité Incendie <br><span>Securousme</span></h1>
-                  <p>Nous proposons des solutions complètes de sécurité incendie pour protéger vos locaux et vos biens,
-                    avec installation et maintenance d’extincteurs.</p>
-                  <div class="btn-box">
-                    <a href="" class="btn-1">Lire plus</a>
-                    <a href="" class="btn-2">Devis</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
 
-      <div class="container indicator_container">
-        <ol class="carousel-indicators">
-          <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
-          <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></li>
-          <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></li>
-          <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3"></li>
-        </ol>
+    <!-- Slides -->
+    <div class="carousel-inner">
+      <div
+        class="carousel-item"
+        *ngFor="let slide of slides; let i = index"
+        [class.active]="i === 0"
+      >
+        <div class="container">
+          <div class="row">
+            <div class="col-md-7">
+              <div class="detail-box">
+                <h1>
+                  {{ slide.title }} <br>
+                  <span>{{ slide.subtitle }}</span>
+                </h1>
+
+                <p>{{ slide.text }}</p>
+
+                <div class="btn-box">
+                  <a href="javascript:void(0)" class="btn-1">Lire plus</a>
+                  <a routerLink="/contact" class="btn-2">Devis</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </section>
+
+    <!-- Indicators -->
+    <div class="container indicator_container">
+      <ol class="carousel-indicators">
+        <li
+          *ngFor="let slide of slides; let i = index"
+          data-bs-target="#carouselExampleIndicators"
+          [attr.data-bs-slide-to]="i"
+          [class.active]="i === 0"
+        ></li>
+      </ol>
+    </div>
+
+  </div>
+</section>
+
 
   <!-- end slider section -->
 
@@ -159,19 +123,17 @@
             </svg>
           </div>
           <div class="detail-box">
-            <h6>
-              Gardinage & Suivi GPS
-            </h6>
-            <p>
+            <h6>{{ service.title }}</h6>
 
-              SPI-GN assure un gardiennage humain qualifié et le suivi GPS de vos engis pour une sécurité globale. Nos
-              agents expérimentés, accompagnés de solutions de suivi intelligentes, protègent vos biens tout en
-              garantissant une gestion fiable et efficace.
+            <p>
+              {{ truncateGardinage(service.text, 140) }}
             </p>
-            <a href="">
-              Lire plus
+
+            <a href="javascript:void(0)" (click)="toggleText()">
+              {{ showMoreService ? 'Lire moins' : 'Lire plus' }}
             </a>
           </div>
+
         </div>
       </div>
       <div class="col-md-4">
@@ -244,18 +206,17 @@
             </svg>
           </div>
           <div class="detail-box">
-            <h6>
-              Sécurité électronique
-            </h6>
+            <h6>{{ securityService.title }}</h6>
+
             <p>
-              SPI-GN garantit une surveillance électronique complète grâce à des systèmes de vidéosurveillance et
-              d’alarme de pointe. Notre technologie avancée, combinée à l’expertise de nos agents, permet un contrôle
-              précis de vos locaux, offrant tranquillité et sécurité.
+              {{ showMoreSecurity ? securityService.text : truncateSecurity(securityService.text, 140) }}
             </p>
-            <a href="">
-              Lire plus
+
+            <a href="javascript:void(0)" (click)="toggleSecurityText()">
+              {{ showMoreSecurity ? 'Lire moins' : 'Lire plus' }}
             </a>
           </div>
+
         </div>
       </div>
       <div class="col-md-4">
@@ -321,18 +282,17 @@
             </svg>
           </div>
           <div class="detail-box">
-            <h6>
-              Sécurité incendie
-            </h6>
+            <h6>{{ fireService.title }}</h6>
+
             <p>
-              SPI-GN s’engage à fournir des solutions de sécurité incendie fiables et efficaces. Nos équipes qualifiées,
-              associées à des équipements modernes, assurent la protection des biens et des personnes contre les risques
-              d’incendie, avec une vigilance et une réactivité constantes.
+              {{ showMoreFire ? fireService.text : truncateFire(fireService.text, 140) }}
             </p>
-            <a href="">
-              Lire plus
+
+            <a href="javascript:void(0)" (click)="toggleFireText()">
+              {{ showMoreFire ? 'Lire moins' : 'Lire plus' }}
             </a>
           </div>
+
         </div>
       </div>
     </div>
@@ -457,7 +417,7 @@
     </div>
 
     <div class="btn-box">
-      <a href="">Voire plus</a>
+      <a class="nav-link" routerLink="/equipe">Voir plus</a>
     </div>
   </div>
 </section>
