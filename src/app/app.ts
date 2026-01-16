@@ -2,11 +2,11 @@ import { Component, HostListener, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Footer } from "./footer/footer";
 import { Header } from "./header/header";
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Footer, NgIf],
+  imports: [RouterOutlet, Footer, CommonModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

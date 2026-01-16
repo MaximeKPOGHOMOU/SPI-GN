@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-about',
-  imports: [Header, Info, CommonModule],
+  imports: [Header, Info, CommonModule, CommonModule],
   templateUrl: './about.html',
   styleUrl: './about.css',
 })
