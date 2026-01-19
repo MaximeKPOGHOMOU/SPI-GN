@@ -8,13 +8,15 @@ import { CountUp } from 'countup.js';
 import { Info } from '../info/info';
 import { Header } from '../header/header';
 
+ declare var PureCounter: any;
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
   imports: [CommonModule, RouterModule, Info, Header, FormsModule],
 })
-export class Home {
+export class Home implements AfterViewInit {
 
 
   // ======================
@@ -88,6 +90,10 @@ export class Home {
   // Constructeur
   // ======================
   constructor(private cd: ChangeDetectorRef, private snackBar: MatSnackBar) { }
+  ngAfterViewInit(): void {
+
+  new PureCounter();
+  }
 
   // ======================
   // Cycle Angular
@@ -168,6 +174,9 @@ onSubmit(form: NgForm) {
       panelClass: type === 'success' ? ['snackbar-success'] : ['snackbar-error']
     });
   }
+
+ 
+
 
 }
 
