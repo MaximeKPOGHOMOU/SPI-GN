@@ -120,12 +120,55 @@
 }
 
 
+.stats-box {
+  display: flex;
+  gap: 40px;               /* espace entre les compteurs */
+  justify-content: flex-start; /* aligné à gauche */
+  align-items: center;
+  flex-wrap: nowrap;
+  text-align: center;
+  margin-bottom: 20px;
+  padding-left: 120px;       /* réduit l'espace à gauche */
+}
+
+/* Chaque compteur */
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  min-width: 80px;
+}
+
+.stat span {
+  font-size: 32px;
+  font-weight: 700;
+  color: #f1c40f;
+}
+
+.stat p {
+  margin: 0;
+  font-size: 14px;
+  color: #fff;
+}
+
+/* Mobile (centré) */
 @media (max-width: 768px) {
   .stats-box {
-    flex-direction: column; 
-    gap: 20px; 
+    justify-content: center; /* centre horizontalement */
+    gap: 20px;               /* espace réduit sur mobile */
+    padding-left: 0;          /* plus d’espace à gauche sur mobile */
+  }
+
+  .stat span {
+    font-size: 24px;
+  }
+
+  .stat p {
+    font-size: 12px;
   }
 }
+
 
 
 

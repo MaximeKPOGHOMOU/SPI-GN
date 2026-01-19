@@ -83,7 +83,7 @@ export class Home implements AfterViewInit {
     { title: 'Sécurité & Gardiennage', subtitle: 'Protection 24/7', text: 'Nos agents qualifiés assurent la sécurité de vos biens et locaux, pour une surveillance constante et fiable.' },
     { title: 'Vidéosurveillance', subtitle: 'Sécurité Électronique', text: 'Nous installons des systèmes de caméras modernes pour surveiller vos locaux et protéger vos espaces stratégiques.' },
     { title: 'Suivi GPS', subtitle: 'Gestion et Traçabilité', text: 'Nous proposons des solutions GPS pour vos véhicules et équipements, permettant un suivi précis et en temps réel.' },
-    { title: 'Sécurité Incendie', subtitle: 'Secourisme', text: 'Nous proposons des solutions complètes de sécurité incendie pour protéger vos locaux et vos biens, avec installation et maintenance d’extincteurs.' }
+    { title: 'Sécurité Incendie', subtitle: 'Secourisme', text: 'Nous proposons des solutions complètes de sécurité incendie pour protéger vos locaux, avec installation et maintenance d’extincteurs.' }
   ];
 
   // ======================
