@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Header } from "../header/header";
 import { CommonModule } from '@angular/common';
-import { Home } from "../home/home";
 import { Info } from "../info/info";
 
 @Component({

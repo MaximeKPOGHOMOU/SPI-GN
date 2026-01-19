@@ -101,4 +101,24 @@
 }
 
 
+.stats-box {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 20px;
+}
+
+.stat span {
+  font-size: 32px;
+  font-weight: 700;
+  color: #f1c40f;
+}
+
+.stat p {
+  margin: 0;
+  font-size: 14px;
+  color: #fff;
+}
+
+
+
 

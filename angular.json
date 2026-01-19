@@ -35,7 +35,8 @@
             "scripts": [
               "src/assets/js/bootstrap.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
-              "src/assets/js/custom.js"
+              "src/assets/js/custom.js",
+              "src/assets/js/purecounter/purecounter_vanilla.js"
             ]
           },
           "configurations": {

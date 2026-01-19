@@ -1,51 +1,46 @@
 <div class="hero_area">
   <app-header></app-header>
   <section class="slider_section">
-  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
 
-    <!-- Slides -->
-    <div class="carousel-inner">
-      <div
-        class="carousel-item"
-        *ngFor="let slide of slides; let i = index"
-        [class.active]="i === 0"
-      >
-        <div class="container">
-          <div class="row">
-            <div class="col-md-7">
-              <div class="detail-box">
-                <h1>
-                  {{ slide.title }} <br>
-                  <span>{{ slide.subtitle }}</span>
-                </h1>
+      <!-- Slides -->
+      <div class="carousel-inner">
+        <div class="carousel-item" *ngFor="let slide of slides; let i = index" [class.active]="i === 0">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-7">
+                <div class="detail-box">
+                  <h1>
+                    {{ slide.title }} <br>
+                    <span>{{ slide.subtitle }}</span>
+                  </h1>
 
-                <p>{{ slide.text }}</p>
+                  <p>{{ slide.text }}</p>
 
-                <div class="btn-box">
-                  <a href="javascript:void(0)" class="btn-1">Lire plus</a>
-                  <a routerLink="/contact" class="btn-2">Devis</a>
+
+
+
+                  <div class="btn-box">
+                    <a routerLink="/about" class="btn-1">A propos</a>
+                    <a routerLink="/contact" class="btn-2">Devis</a>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Indicators -->
-    <div class="container indicator_container">
-      <ol class="carousel-indicators">
-        <li
-          *ngFor="let slide of slides; let i = index"
-          data-bs-target="#carouselExampleIndicators"
-          [attr.data-bs-slide-to]="i"
-          [class.active]="i === 0"
-        ></li>
-      </ol>
-    </div>
+      <!-- Indicators -->
+      <div class="container indicator_container">
+        <ol class="carousel-indicators">
+          <li *ngFor="let slide of slides; let i = index" data-bs-target="#carouselExampleIndicators"
+            [attr.data-bs-slide-to]="i" [class.active]="i === 0"></li>
+        </ol>
+      </div>
 
-  </div>
-</section>
+    </div>
+  </section>
 
 
   <!-- end slider section -->
@@ -73,13 +68,11 @@
             </h2>
           </div>
           <p>
-            SPI-GN est une entreprise spécialisée dans la sécurité & gardiennage, la sécurité incendie, la
-            géolocalisation, l’installation de caméras de surveillance, la gestion du temps de présence et d’accès par
-            empreintes digitales, ainsi que de nombreux autres services.
+            {{ truncatePresentation(PresentationText, 250, showPresentation) }}
           </p>
           <div class="btn-box">
-            <a href="">
-              Lire plus
+            <a href="javascript:void(0)" (click)="togglePresentation()">
+              {{ showPresentation ? 'Lire moins' : 'Lire plus' }}
             </a>
           </div>
         </div>
