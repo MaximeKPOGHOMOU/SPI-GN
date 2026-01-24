@@ -126,31 +126,55 @@
   justify-content: flex-start; /* aligné à gauche */
   align-items: center;
   flex-wrap: nowrap;
-  text-align: center;
+
   margin-bottom: 20px;
-  padding-left: 120px;       /* réduit l'espace à gauche */
+  padding-left: 105px;       /* réduit l'espace à gauche */
 }
 
 /* Chaque compteur */
 .stat {
   display: flex;
   flex-direction: column;
-  align-items: center;
   flex-shrink: 0;
   min-width: 80px;
+  padding: 12px;
+}
+/* Chaque compteur */
+.state {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  min-width: 80px;
+  padding: 12px;
+  margin-left: 15px;
 }
 
+.state span {
+  font-size: 32px;
+  font-weight: 700;
+  color: #f1c40f;
+}
 .stat span {
   font-size: 32px;
   font-weight: 700;
   color: #f1c40f;
 }
 
+.state p {
+  margin: 0;
+  font-size: 14px;
+  color: #fff;
+  margin-left: 2px;
+}
 .stat p {
   margin: 0;
   font-size: 14px;
   color: #fff;
 }
+
+
+
+
 
 /* Mobile (centré) */
 @media (max-width: 768px) {
