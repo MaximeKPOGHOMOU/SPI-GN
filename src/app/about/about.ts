@@ -23,7 +23,7 @@ export class About {
     {
       name: 'SÉCURITÉ & GARDIENNAGE',
       description: 'Nos agents qualifiés assurent la protection de vos biens et locaux 24/7, pour une surveillance fiable et professionnelle.',
-      image: 'assets/images/t1.jpg'
+      image: 'assets/images/agent_1.jpeg'
     },
     {
       name: 'GÉOLOCALISATION',
