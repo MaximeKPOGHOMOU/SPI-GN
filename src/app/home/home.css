@@ -180,7 +180,7 @@
 @media (max-width: 768px) {
   .stats-box {
     justify-content: center; /* centre horizontalement */
-    gap: 20px;               /* espace réduit sur mobile */
+    gap: 6px;               /* espace réduit sur mobile */
     padding-left: 0;          /* plus d’espace à gauche sur mobile */
   }
 
@@ -189,6 +189,13 @@
   }
 
   .stat p {
+    font-size: 12px;
+  }
+  .state span {
+    font-size: 24px;
+  }
+
+  .state p {
     font-size: 12px;
   }
 }
