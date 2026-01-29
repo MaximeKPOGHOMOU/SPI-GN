@@ -1,3 +1,5 @@
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
+
 /* ==== SNACKBAR SUCCESS ==== */
 .mat-mdc-snack-bar-container.snackbar-success {
   background-color: #2e7d32 !important;   /* vert */
@@ -23,4 +25,60 @@ header.header_section {
     margin: 0;
     padding: 0;
 }
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+
+/* ==== 
+Le style du boite de dialog ==== */
+.form-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 0 10px;
+}
+
+.form-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 15px; /* moins d'espace */
+  color: #1976d2;
+  text-align: center;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;           /* espace horizontal légèrement réduit */
+  margin-bottom: 10px; /* réduit l'espace vertical entre les lignes */
+  flex-wrap: wrap;
+}
+
+.flex-field {
+  flex: 1;
+  min-width: 150px;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;           /* réduit l'espace entre les boutons */
+  margin-top: 10px;
+}
+
+/* Ajustement des mat-form-field pour réduire le padding vertical */
+.mat-form-field-appearance-fill .mat-form-field-wrapper {
+  padding-bottom: 4px; /* réduit l’espace sous le champ */
+  
+}
+
+/* Responsive mobile */
+@media (max-width: 600px) {
+  .form-row {
+    flex-direction: column;
+    margin-bottom: 8px; /* encore plus compact sur mobile */
+  }
+}
+
 

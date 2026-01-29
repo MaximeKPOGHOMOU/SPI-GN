@@ -67,7 +67,7 @@ export class Home implements AfterViewInit {
   guards = [
     { name: 'Sékou SOUMAHORO', role: 'Président directeur général ', image: 'assets/images/dg.jpg' },
     { name: 'Ousmane TOURE', role: 'Directeur général adjoint', image: 'assets/images/dga.jpg' },
-    { name: 'Maxime KPOGHOMOU', role: 'Responsable IT', image: 'assets/images/maxime.jpeg' }
+         { name: 'Jean Ahmadou SOW', role: 'Responsable Financier ', image: 'assets/images/sow.jpeg' },
   ];
 
   // ======================

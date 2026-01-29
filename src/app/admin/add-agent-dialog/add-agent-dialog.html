@@ -1,0 +1,41 @@
+<div class="form-container">
+  <h2 class="form-title">
+    {{ newAgent.id ? 'MODIFIER UN PERSONNEL' : 'AJOUTER UN PERSONNEL' }}
+  </h2>
+
+  <div class="form-row">
+    <mat-form-field class="flex-field" appearance="fill">
+      <mat-label>Prénom</mat-label>
+      <input matInput [(ngModel)]="newAgent.first_name">
+    </mat-form-field>
+
+    <mat-form-field class="flex-field" appearance="fill">
+      <mat-label>Nom</mat-label>
+      <input matInput [(ngModel)]="newAgent.last_name">
+    </mat-form-field>
+  </div>
+
+  <div class="form-row">
+    <mat-form-field class="flex-field" appearance="fill">
+      <mat-label>Téléphone</mat-label>
+      <input matInput [(ngModel)]="newAgent.telephone">
+    </mat-form-field>
+
+    <mat-form-field class="flex-field" appearance="fill">
+      <mat-label>Rôle</mat-label>
+      <mat-select [(ngModel)]="newAgent.role">
+        <mat-option value="agent">Agent</mat-option>
+        <mat-option value="admin">Admin</mat-option>
+        <mat-option value="superviseur">Superviseur</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="dialog-actions">
+    <button mat-raised-button color="primary" (click)="addAgent()">
+      {{ newAgent.id ? 'Modifier' : 'Ajouter' }}
+    </button>
+    <button mat-stroked-button color="warn" (click)="close()">Annuler</button>
+  </div>
+
+</div>

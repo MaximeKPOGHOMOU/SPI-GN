@@ -1,0 +1,102 @@
+<div class="agents-container">
+
+  <mat-toolbar color="primary" class="center-toolbar">
+    <span>GESTION DES PERSONNELS</span>
+  </mat-toolbar>
+
+
+  <mat-card>
+
+<div class="card-header">
+  <h3>LISTE DES PERSONNELS</h3>
+
+  <div class="header-actions">
+    <mat-form-field appearance="fill" class="search-field">
+      <mat-label>Rechercher...</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Nom, Prénom, Téléphone…">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="openAddAgentDialog()">
+      <mat-icon>person_add</mat-icon>
+      Ajouter
+    </button>
+  </div>
+</div>
+
+
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="agents" class="mat-elevation-z8 full-table">
+
+
+        <!-- Index -->
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef>N°</th>
+          <td mat-cell *matCellDef="let a; let i = index">{{ i + 1 }}</td>
+        </ng-container>
+
+        <!-- Prénom -->
+        <ng-container matColumnDef="first_name">
+          <th mat-header-cell *matHeaderCellDef>Prénom</th>
+          <td mat-cell *matCellDef="let a">{{ a.first_name }}</td>
+        </ng-container>
+
+        <!-- Nom -->
+        <ng-container matColumnDef="last_name">
+          <th mat-header-cell *matHeaderCellDef>Nom</th>
+          <td mat-cell *matCellDef="let a">{{ a.last_name }}</td>
+        </ng-container>
+
+        <!-- Téléphone -->
+        <ng-container matColumnDef="telephone">
+          <th mat-header-cell *matHeaderCellDef>Téléphone</th>
+          <td mat-cell *matCellDef="let a">{{ a.telephone }}</td>
+        </ng-container>
+
+        <!-- Rôle -->
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef>Rôle</th>
+          <td mat-cell *matCellDef="let a">{{ a.role }}</td>
+        </ng-container>
+
+        <!-- Status -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let a">
+            <mat-slide-toggle [checked]="a.status" (change)="toggleStatus(a, $event)" color="primary">
+              {{ a.status ? 'Actif' : 'Inactif' }}
+            </mat-slide-toggle>
+
+          </td>
+        </ng-container>
+
+
+        <!-- Actions -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let a">
+
+            <!-- Supprimer -->
+            <button mat-icon-button color="primary" (click)="openEditDialog(a)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <!-- Modifier / Détails -->
+            <button mat-icon-button color="primary">
+              <mat-icon>visibility</mat-icon> <!-- ou edit si tu veux icône de modification -->
+            </button>
+          </td>
+        </ng-container>
+
+
+
+        <!-- Header et row -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+  </mat-card>
+
+
+
+</div>
