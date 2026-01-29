@@ -7,26 +7,33 @@
 
   <mat-card>
 
-<div class="card-header">
-  <h3>LISTE DES PERSONNELS</h3>
+    <div class="card-header">
+      <h3>LISTE DES PERSONNELS</h3>
 
-  <div class="header-actions">
-    <mat-form-field appearance="fill" class="search-field">
-      <mat-label>Rechercher...</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Nom, Prénom, Téléphone…">
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
+      <div class="header-actions">
+        <mat-form-field appearance="fill" class="search-field">
+          <mat-label>Rechercher...</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Nom, Prénom, Téléphone…">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
 
-    <button mat-raised-button color="primary" (click)="openAddAgentDialog()">
-      <mat-icon>person_add</mat-icon>
-      Ajouter
-    </button>
-  </div>
-</div>
+        <button mat-raised-button color="primary" (click)="openAddAgentDialog()">
+          <mat-icon>person_add</mat-icon>
+          Ajouter
+        </button>
+        <button mat-raised-button color="primary" (click)="printAgents()">
+  <mat-icon>print</mat-icon>
+  Imprimer
+</button>
+
+      </div>
+    </div>
 
 
-    <div class="table-wrapper">
-      <table mat-table [dataSource]="agents" class="mat-elevation-z8 full-table">
+    <div class="table-wrapper " *ngIf="!loading; else loadingTemplate">
+
+      <table mat-table [dataSource]="agents" class="mat-elevation-z8 full-table"
+        *ngIf="agents.data.length > 0; else noDataTemplate">
 
 
         <!-- Index -->
@@ -36,32 +43,51 @@
         </ng-container>
 
         <!-- Prénom -->
+        <ng-container matColumnDef="matricule">
+          <th mat-header-cell *matHeaderCellDef>MATRICULE</th>
+          <td mat-cell *matCellDef="let a">{{ a.matricule }}</td>
+        </ng-container>
+
+        <!-- Prénom -->
         <ng-container matColumnDef="first_name">
-          <th mat-header-cell *matHeaderCellDef>Prénom</th>
+          <th mat-header-cell *matHeaderCellDef>PRENOM</th>
           <td mat-cell *matCellDef="let a">{{ a.first_name }}</td>
         </ng-container>
 
         <!-- Nom -->
         <ng-container matColumnDef="last_name">
-          <th mat-header-cell *matHeaderCellDef>Nom</th>
+          <th mat-header-cell *matHeaderCellDef>NOM</th>
           <td mat-cell *matCellDef="let a">{{ a.last_name }}</td>
         </ng-container>
 
         <!-- Téléphone -->
         <ng-container matColumnDef="telephone">
-          <th mat-header-cell *matHeaderCellDef>Téléphone</th>
+          <th mat-header-cell *matHeaderCellDef>TELEPHONE</th>
           <td mat-cell *matCellDef="let a">{{ a.telephone }}</td>
         </ng-container>
 
+        <!-- Adresse -->
+        <ng-container matColumnDef="adresse">
+          <th mat-header-cell *matHeaderCellDef> ADRESSE </th>
+          <td mat-cell *matCellDef="let agent"> {{ agent.adresse }} </td>
+        </ng-container>
+
+        <!-- Fonction -->
+        <ng-container matColumnDef="fonction">
+          <th mat-header-cell *matHeaderCellDef> FONCTION </th>
+          <td mat-cell *matCellDef="let agent"> {{ agent.fonction }} </td>
+        </ng-container>
+
+
         <!-- Rôle -->
         <ng-container matColumnDef="role">
-          <th mat-header-cell *matHeaderCellDef>Rôle</th>
+          <th mat-header-cell *matHeaderCellDef>ROLE</th>
           <td mat-cell *matCellDef="let a">{{ a.role }}</td>
         </ng-container>
 
         <!-- Status -->
         <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <th mat-header-cell *matHeaderCellDef>STATUS</th>
           <td mat-cell *matCellDef="let a">
             <mat-slide-toggle [checked]="a.status" (change)="toggleStatus(a, $event)" color="primary">
               {{ a.status ? 'Actif' : 'Inactif' }}
@@ -73,7 +99,7 @@
 
         <!-- Actions -->
         <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <th mat-header-cell *matHeaderCellDef>ACTIONS</th>
           <td mat-cell *matCellDef="let a">
 
             <!-- Supprimer -->
@@ -97,6 +123,16 @@
 
   </mat-card>
 
+  <ng-template #loadingTemplate>
+    <div class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  </ng-template>
 
+  <ng-template #noDataTemplate>
+    <div class="no-data-message">
+      Aucun personnel disponible.
+    </div>
+  </ng-template>
 
 </div>

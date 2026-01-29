@@ -1,8 +1,10 @@
 <div class="form-container">
+
   <h2 class="form-title">
     {{ newAgent.id ? 'MODIFIER UN PERSONNEL' : 'AJOUTER UN PERSONNEL' }}
   </h2>
 
+  <!-- Prenom + Nom -->
   <div class="form-row">
     <mat-form-field class="flex-field" appearance="fill">
       <mat-label>Prénom</mat-label>
@@ -15,10 +17,30 @@
     </mat-form-field>
   </div>
 
+  <!-- Téléphone + Adresse -->
   <div class="form-row">
     <mat-form-field class="flex-field" appearance="fill">
       <mat-label>Téléphone</mat-label>
       <input matInput [(ngModel)]="newAgent.telephone">
+    </mat-form-field>
+
+    <mat-form-field class="flex-field" appearance="fill">
+      <mat-label>Adresse</mat-label>
+      <input matInput [(ngModel)]="newAgent.adresse">
+    </mat-form-field>
+  </div>
+
+  <!-- Fonction + Role -->
+  <div class="form-row">
+
+    <mat-form-field class="flex-field" appearance="fill">
+      <mat-label>Fonction</mat-label>
+      <mat-select [(ngModel)]="newAgent.fonction">
+        <mat-option value="agent">Agent</mat-option>
+        <mat-option value="comptable">Comptable</mat-option>
+        <mat-option value="technicien">Technicien</mat-option>
+        <mat-option value="superviseur">Superviseur</mat-option>
+      </mat-select>
     </mat-form-field>
 
     <mat-form-field class="flex-field" appearance="fill">
@@ -31,11 +53,18 @@
     </mat-form-field>
   </div>
 
-  <div class="dialog-actions">
-    <button mat-raised-button color="primary" (click)="addAgent()">
-      {{ newAgent.id ? 'Modifier' : 'Ajouter' }}
-    </button>
-    <button mat-stroked-button color="warn" (click)="close()">Annuler</button>
-  </div>
+<div class="dialog-actions">
+  <button mat-raised-button color="primary" (click)="addAgent()" [disabled]="loading" class="btn-with-spinner">
+    <span class="btn-text">
+      {{ loading ? (newAgent.id ? 'Modification en cours...' : 'Ajout en cours...')
+                 : (newAgent.id ? 'Modifier' : 'Ajouter') }}
+    </span>
+  </button>
+
+  <button mat-stroked-button color="warn" (click)="close()">
+    Annuler
+  </button>
+</div>
+
 
 </div>

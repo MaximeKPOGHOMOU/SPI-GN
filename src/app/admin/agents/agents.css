@@ -6,10 +6,6 @@
   font-size: 1.2rem;
 }
 
-.toolbar .spacer {
-  flex: 1 1 auto;
-}
-
 /* Mat-card */
 mat-card {
   margin: 20px;
@@ -25,19 +21,44 @@ mat-card h3 {
   font-weight: 600;
 }
 
+/* Card header */
+.card-header {
+  display: flex;
+  justify-content: space-between; /* titre à gauche, boutons à droite */
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.card-header h3 {
+  margin: 0;
+}
+
+/* Header actions (search + bouton) */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 /* Table styling */
+.table-wrapper {
+  width: 100%;
+  max-height: 400px; /* limite la hauteur visible de la table */
+  overflow-y: auto;  /* scroll vertical uniquement pour la table */
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.mat-elevation-z8 {
-  box-shadow: 0 4px 20px rgba(0,0,0,0.12) !important;
-}
-
-th.mat-header-cell {
+/* Garder le header de la table fixe */
+table thead th {
+  position: sticky;
+  top: 0;
   background-color: #1976d2;
-  color: white;
+  z-index: 2;
+  color: #fff;
   font-weight: 600;
   text-transform: uppercase;
 }
@@ -47,6 +68,12 @@ td.mat-cell {
   font-size: 0.95rem;
 }
 
+/* Ombre table */
+.mat-elevation-z8 {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12) !important;
+}
+
+/* Boutons */
 button[mat-icon-button] {
   transition: all 0.3s ease;
 }
@@ -55,7 +82,6 @@ button[mat-icon-button]:hover {
   background-color: rgba(255, 0, 0, 0.1);
 }
 
-/* Bouton Ajouter Agent */
 button[mat-raised-button] {
   margin-left: 10px;
   font-weight: 600;
@@ -64,6 +90,27 @@ button[mat-raised-button] {
 button[mat-raised-button] mat-icon {
   margin-right: 5px;
   vertical-align: middle;
+}
+
+/* Icon color */
+.icon-blue mat-icon {
+  color: #1976d2; /* bleu */
+}
+
+/* Spinner */
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 150px; /* hauteur minimale pour que ça ne fasse pas sauter la mise en page */
+}
+
+/* Center toolbar */
+.center-toolbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 0;
 }
 
 /* Responsive */
@@ -82,42 +129,37 @@ button[mat-raised-button] mat-icon {
   }
 }
 
-.agents-container {
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 64px); /* 64px = hauteur du toolbar si nécessaire */
-  padding: 16px;
-  box-sizing: border-box;
+
+/* 🔥 Texte des colonnes */
+.mat-mdc-header-cell {
+  color: #1976d2 !important;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
-.mat-card {
-  flex: 1 1 auto; /* prend l'espace disponible */
-  display: flex;
-  flex-direction: column;
+.no-data-message {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #888;
+  padding: 40px 0;
 }
 
 .table-wrapper {
-  flex: 1 1 auto;
-  overflow-y: auto; /* scroll vertical si beaucoup de lignes */
+  max-height: 400px; /* ou la hauteur que tu veux pour le scroll */
+  overflow-y: auto;  /* active le scroll vertical */
+  display: block;    /* nécessaire pour que overflow fonctionne */
 }
 
-.icon-blue mat-icon {
-  color: #1d6eb1; /* bleu */
-}
-.card-header {
-  display: flex;
-  justify-content: space-between; /* titre gauche, bouton droite */
-  align-items: center;
-  margin-bottom: 15px;
+.full-table {
+  width: 100%;
+  min-width: 600px; /* optionnel, si tu veux un minimum pour les colonnes */
+  border-collapse: collapse;
 }
 
-.card-header h3 {
-  margin: 0; /* enlève l'espace vertical bizarre */
-}
-.center-toolbar {
-  display: flex;
-  justify-content: center; /* centre horizontalement */
-  align-items: center;
-  padding: 30px 0;
+.no-data-message {
+  text-align: center;
+  padding: 20px;
+  color: #555;
+  font-weight: 500;
 }
 
