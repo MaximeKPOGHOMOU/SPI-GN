@@ -1,0 +1,157 @@
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatTableModule } from '@angular/material/table';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
+import { MatSlideToggleModule, MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
+import { SupabaseService } from '../../services/supabase';
+import { Equipement } from '../../models/equipement';
+import { MatTableDataSource } from '@angular/material/table';
+import { AddEquipementDialog } from '../add-equipement-dialog/add-equipement-dialog';
+import { MatSelect, MatSelectModule } from "@angular/material/select";
+
+@Component({
+  selector: 'app-equipements',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatCardModule,
+    MatSlideToggleModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    MatSelectModule
+  ],
+  templateUrl: './equipements.html',
+  styleUrls: ['./equipements.css'],
+})
+export class Equipements implements OnInit {
+
+  // ==================
+  // 🔹 PROPRIÉTÉS
+  // ==================
+  equipements = new MatTableDataSource<Equipement>();
+  displayedColumns: string[] = [
+    'index', 'code', 'designation', 'categorie', 'type_usage', 'status', 'quantity', 'actions'
+  ];
+  loading = true;
+
+  constructor(
+    private supabaseService: SupabaseService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef
+  ) { }
+
+  // ==================
+  // 🔹 CYCLE DE VIE
+  // ==================
+  async ngOnInit() {
+    await this.loadEquipements();
+    this.cdr.detectChanges();
+  }
+
+  // ==================
+  // 🔹 GESTION DES EQUIPEMENTS
+  // ==================
+  async loadEquipements() {
+    this.loading = true;
+    try {
+      const data = await this.supabaseService.getEquipements();
+
+      // 🔹 Calculer le status pour chaque équipement
+      data.forEach(e => {
+        e.status = e.quantity === 0 ? 'indisponible'
+          : e.quantity! < (e.min_stock || 5) ? 'attention'
+            : 'disponible';
+      });
+
+      this.equipements.data = data;
+    } catch (error) {
+      console.error('Erreur loadEquipements:', error);
+    } finally {
+      this.loading = false;
+    }
+  }
+
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.equipements.filter = filterValue.trim().toLowerCase();
+  }
+
+  /** Ouvre le dialogue pour ajouter un équipement */
+  openAddEquipementDialog() {
+    const dialogRef = this.dialog.open(AddEquipementDialog, {
+      width: '450px',
+      panelClass: 'custom-dialog-container'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) this.loadEquipements();
+    });
+  }
+
+  /** Ouvre le dialogue pour modifier un équipement existant */
+  openEditDialog(equipement: Equipement) {
+    const dialogRef = this.dialog.open(AddEquipementDialog, {
+      width: '450px',
+      data: equipement,
+      panelClass: 'custom-dialog-container'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) this.loadEquipements();
+    });
+  }
+
+
+
+  /** Génère un code automatique EQ001, EQ002... */
+  async generateCode(): Promise<string> {
+    const equipements = await this.supabaseService.getEquipements();
+    const codes = equipements
+      .map(e => e.code)
+      .filter(code => code.startsWith('EQ'))
+      .map(code => parseInt(code.slice(2), 10))
+      .sort((a, b) => b - a);
+
+    const lastNumber = codes[0] || 0;
+    const newNumber = (lastNumber + 1).toString().padStart(3, '0');
+    return `EQ${newNumber}`;
+  }
+
+  // ==================
+  // 🔹 UTILITAIRES
+  // ==================
+  showToast(message: string, type: 'success' | 'error' = 'success') {
+    this.snackBar.open(message, 'OK', {
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+      panelClass: type === 'success' ? ['snackbar-success'] : ['snackbar-error']
+    });
+  }
+
+  getStatusColor(e: Equipement): string {
+    switch (e.status) {
+      case 'disponible': return 'green';
+      case 'attention': return 'orange';
+      case 'indisponible': return 'red';
+      default: return 'black';
+    }
+  }
+
+
+}

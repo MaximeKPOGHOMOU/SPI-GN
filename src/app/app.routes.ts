@@ -6,19 +6,35 @@ import { Equipe } from './equipe/equipe';
 import { Home } from './home/home';
 import { Agents } from './admin/agents/agents';
 import { Clients } from './admin/clients/clients';
+import { Sites } from './admin/sites/sites';
+import { Equipements } from './admin/equipements/equipements';
+import { Dotations } from './admin/dotations/dotations';
+import { Dashboard } from './admin/dashboard/dashboard';
+import { Layout } from './admin/layout/layout';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'home', pathMatch: 'full' },
-    { path: 'home', component: Home },
-    { path: 'about', component: About },
-    { path: 'equipe', component: Equipe },
-    { path: 'service', component: Service },
-    { path: 'contact', component: Contact },
-    { path: 'contact', component: Contact },
-    // { path: 'admin', component: Contact },
-    { path: 'admin/agent', component: Agents },
-    { path: 'admin/client', component: Clients },
 
-    
+  { path: '', redirectTo: 'admin/dashboard', pathMatch: 'full' },
+
+  {
+    path: 'admin',
+    component: Layout,
+    children: [
+
+      { path: 'dashboard', component: Dashboard },
+      { path: 'agent', component: Agents },
+      { path: 'client', component: Clients },
+      { path: 'site', component: Sites },
+      { path: 'equipement', component: Equipements },
+      { path: 'dotation', component: Dotations },
+
+    ]
+  },
+
+  { path: 'home', component: Home },
+  { path: 'about', component: About },
+  { path: 'equipe', component: Equipe },
+  { path: 'service', component: Service },
+  { path: 'contact', component: Contact },
+
 ];
-

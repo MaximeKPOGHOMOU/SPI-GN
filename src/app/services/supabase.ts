@@ -2,6 +2,11 @@ import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
 import { Agent } from '../models/agent';
+import { Client } from '../models/client';
+import { Site } from '../models/site';
+import { Equipement } from '../models/equipement';
+import { Dotations } from '../admin/dotations/dotations';
+import { Dotation } from '../models/dotation';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +14,7 @@ import { Agent } from '../models/agent';
 export class SupabaseService {
 
   private supabase: SupabaseClient;
+  
 
   constructor() {
     // Initialisation du client Supabase avec URL et clé
@@ -23,14 +29,22 @@ export class SupabaseService {
    * Récupère tous les agents depuis la table 'agents'
    * @returns Liste d'agents
    */
-  async getAgents(): Promise<Agent[]> {
-    const { data, error } = await this.supabase.from('agents').select('*');
-    if (error) {
-      console.error('Erreur getAgents:', error);
-      return [];
-    }
-    return data || [];
+async getAgents(): Promise<Agent[]> {
+  const { data, error } = await this.supabase
+    .from('agents')
+    .select(`
+      *,
+      site:sites(id,name)
+    `);
+
+  if (error) {
+    console.error('Erreur getAgents:', error);
+    return [];
   }
+
+  return data || [];
+}
+
 
   /**
    * Génère un matricule unique pour un nouvel agent
@@ -73,11 +87,26 @@ export class SupabaseService {
    * @param id ID de l'agent
    * @param agent Données à mettre à jour
    */
-  async updateAgent(id: string, agent: any) {
-    const { data, error } = await this.supabase.from('agents').update(agent).eq('id', id);
-    if (error) throw error;
-    return data;
-  }
+async updateAgent(id: string, agent: Agent) {
+  const payload: any = {
+    first_name: agent.first_name,
+    last_name: agent.last_name,
+    telephone: agent.telephone,
+    adresse: agent.adresse,
+    site_id: agent.site_id,
+    role: agent.role,
+    status: agent.status
+  };
+
+  const { data, error } = await this.supabase
+    .from('agents')
+    .update(payload)
+    .eq('id', id);
+
+  if (error) throw error;
+  return data;
+}
+
 
   /**
    * Supprime un agent
@@ -127,4 +156,263 @@ export class SupabaseService {
   async signOut() {
     await this.supabase.auth.signOut();
   }
+
+  // ================== CLIENTS ==================
+async getClients(): Promise<Client[]> {
+  const { data, error } = await this.supabase.from('clients').select('*');
+  if (error) {
+    console.error(error);
+    return [];
+  }
+  return data || [];
+}
+
+async addClient(client: Client) {
+  const { data, error } = await this.supabase.from('clients').insert([client]);
+  if (error) throw error;
+  return data;
+}
+
+async updateClient(id: string, client: Client) {
+  const { data, error } = await this.supabase.from('clients').update(client).eq('id', id);
+  if (error) throw error;
+  return data;
+}
+
+async deleteClient(id: string) {
+  const { data, error } = await this.supabase.from('clients').delete().eq('id', id);
+  if (error) throw error;
+  return data;
+}
+
+async updateClientStatus(id: string, status: boolean) {
+  if (!id) throw new Error('ID manquant');
+
+  const { data, error } = await this.supabase
+    .from('clients')
+    .update({ status })
+    .eq('id', id);
+
+  if (error) throw error;
+  return data;
+}
+
+
+// Gestion des sites
+// sites.service.ts ou supabase.service.ts
+async getSites() {
+  const { data, error } = await this.supabase
+    .from('sites')
+    .select(`
+      *,
+      client:clients (id, first_name, last_name)
+    `);
+
+  if (error) throw error;
+
+  // Ajoute un champ client_name pour le template
+  return data.map((site: any) => ({
+    ...site,
+    client_name: site.client ? `${site.client.first_name} ${site.client.last_name}` : null
+  }));
+}
+
+
+async addSite(site: Site) {
+  const { data, error } = await this.supabase.from('sites').insert([site]);
+  if (error) throw error;
+  return data;
+}
+
+async updateSite(id: string, site: Site & { client?: any; client_name?: string }) {
+  // Ne garder que les champs valides pour la table
+  const payload: any = {
+    client_id: site.client_id,
+    name: site.name,
+    adresse: site.adresse,
+    telephone: site.telephone
+  };
+
+  const { data, error } = await this.supabase.from('sites').update(payload).eq('id', id);
+  if (error) throw error;
+  return data;
+}
+
+
+async deleteSite(id: string) {
+  const { data, error } = await this.supabase.from('sites').delete().eq('id', id);
+  if (error) throw error;
+  return data;
+}
+
+// ==================
+  // EQUIPEMENTS
+  // ==================
+
+async getEquipements(): Promise<Equipement[]> {
+  const { data, error } = await this.supabase
+    .from('equipements')  // nom de la table
+    .select('*');
+
+  if (error) {
+    console.error('Erreur getEquipements:', error); // corrige le message
+    return [];
+  }
+
+  // On caste le résultat pour TypeScript
+  return (data as Equipement[]) || [];
+}
+
+
+
+  /**
+   * Ajoute un nouvel équipement
+   * @param equip Equipement à ajouter
+   */
+  async addEquipement(equip: Omit<Equipement, 'id' | 'created_at'>) {
+    // Générer un code unique pour l'équipement si non fourni
+    if (!equip.code) {
+      equip.code = await this.generateEquipementCode();
+    }
+
+    const { data, error } = await this.supabase.from('equipements').insert([equip]);
+    if (error) throw error;
+    return data;
+  }
+
+  /**
+   * Met à jour un équipement existant
+   * @param id ID de l'équipement
+   * @param equip Données à mettre à jour
+   */
+  async updateEquipement(id: string, equip: Partial<Equipement>) {
+    const { data, error } = await this.supabase
+      .from('equipements')
+      .update(equip)
+      .eq('id', id);
+
+    if (error) throw error;
+    return data;
+  }
+
+  /**
+   * Génère un code unique pour l'équipement
+   * Format : EQ + 3 chiffres incrémentés (ex: EQ001)
+   */
+  async generateEquipementCode(): Promise<string> {
+    const equipments = await this.getEquipements();
+    let lastNumber = 0;
+
+    if (equipments.length) {
+      // Récupère le dernier code existant
+      const codes = equipments
+        .map(e => e.code)
+        .filter(code => code.startsWith('EQ'))
+        .map(code => parseInt(code.slice(2), 10))
+        .sort((a, b) => b - a);
+
+      lastNumber = codes[0] || 0;
+    }
+
+    const newNumber = (lastNumber + 1).toString().padStart(3, '0');
+    return `EQ${newNumber}`;
+  }
+
+
+  // ==================
+  // Demande de dotation
+  // ==================
+
+async getDemandes(): Promise<any[]> {
+  const { data, error } = await this.supabase
+    .from('dotations')
+    .select(`
+      id,
+      code,
+      quantite,
+      date_dotation,
+
+      agent:agents (
+        id,
+        first_name,
+        last_name
+      ),
+
+      site:sites (
+        id,
+        name
+      ),
+
+      equipement:equipements (
+        id,
+        designation
+      )
+    `)
+    .order('date_dotation', { ascending: false });
+
+  if (error) {
+    console.error('Erreur getDemandes:', error);
+    return [];
+  }
+
+  return data || [];
+}
+
+
+
+  /**
+   * Ajoute un nouvel équipement
+   * @param equip Equipement à ajouter
+   */
+  async addDemande(equip: Omit<Dotation, 'id' | 'created_at'>) {
+    // Générer un code unique pour l'équipement si non fourni
+    if (!equip.code) {
+      equip.code = await this.generateDemandeCode();
+    }
+
+    const { data, error } = await this.supabase.from('dotations').insert([equip]);
+    if (error) throw error;
+    return data;
+  }
+
+  /**
+   * Met à jour un équipement existant
+   * @param id ID de l'équipement
+   * @param equip Données à mettre à jour
+   */
+  async updateDemande(id: string, equip: Partial<Dotation>) {
+    const { data, error } = await this.supabase
+      .from('dotations')
+      .update(equip)
+      .eq('id', id);
+
+    if (error) throw error;
+    return data;
+  }
+
+  /**
+   * Génère un code unique pour l'équipement
+   * Format : EQ + 3 chiffres incrémentés (ex: EQ001)
+   */
+  async generateDemandeCode(): Promise<string> {
+    const demandes = await this.getDemandes();
+    let lastNumber = 0;
+
+    if (demandes.length) {
+      // Récupère le dernier code existant
+      const codes = demandes
+        .map(e => e.code)
+        .filter(code => code.startsWith('EQ'))
+        .map(code => parseInt(code.slice(2), 10))
+        .sort((a, b) => b - a);
+
+      lastNumber = codes[0] || 0;
+    }
+
+    const newNumber = (lastNumber + 1).toString().padStart(3, '0');
+    return `dm-spi-gn-${newNumber}`;
+  }
+
+  
+
 }

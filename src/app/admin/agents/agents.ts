@@ -44,7 +44,7 @@ export class Agents implements OnInit {
   agents = new MatTableDataSource<Agent>();           // Source de données pour la table
   displayedColumns: string[] = [                      // Colonnes affichées dans le tableau
     'index', 'matricule', 'first_name', 'last_name', 'telephone',
-    'adresse', 'fonction', 'role', 'status', 'actions'
+    'adresse', 'site', 'status', 'actions'
   ];
   loading = true;                                     // Indicateur de chargement
 
@@ -121,7 +121,7 @@ export class Agents implements OnInit {
       await this.supabaseService.updateAgentStatus(agent.id, newStatus);
       agent.status = newStatus;
       this.showToast(
-        `Personnel ${agent.first_name} ${agent.last_name} est maintenant ${newStatus ? 'Actif' : 'Inactif'}`,
+        `Agent ${agent.first_name} ${agent.last_name} est maintenant ${newStatus ? 'Actif' : 'Inactif'}`,
         'success'
       );
     } catch (err) {

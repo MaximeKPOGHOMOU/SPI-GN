@@ -1,0 +1,57 @@
+<div class="sidebar-logo">
+  <img src="assets/images/logo.png" alt="Logo" />
+  <!-- OU si tu veux juste du texte -->
+  <!-- <span class="logo-text">AdminPanel</span> -->
+</div>
+
+<mat-nav-list>
+
+  <a mat-list-item 
+     routerLink="/admin/dashboard"
+     routerLinkActive="active-link"
+     [routerLinkActiveOptions]="{ exact: true }">
+    <mat-icon matListItemIcon>dashboard</mat-icon>
+    <span matListItemTitle>Dashboard</span>
+  </a>
+
+  <a mat-list-item 
+     routerLink="/admin/agent"
+     routerLinkActive="active-link"
+     [routerLinkActiveOptions]="{ exact: true }">
+    <mat-icon matListItemIcon>groups</mat-icon>
+    <span matListItemTitle>Agents</span>
+  </a>
+
+  <a mat-list-item 
+     routerLink="/admin/client"
+     routerLinkActive="active-link"
+     [routerLinkActiveOptions]="{ exact: true }">
+    <mat-icon matListItemIcon>business</mat-icon>
+    <span matListItemTitle>Clients</span>
+  </a>
+
+  <a mat-list-item 
+     routerLink="/admin/site"
+     routerLinkActive="active-link"
+     [routerLinkActiveOptions]="{ exact: true }">
+    <mat-icon matListItemIcon>location_on</mat-icon>
+    <span matListItemTitle>Sites</span>
+  </a>
+
+  <a mat-list-item 
+     routerLink="/admin/equipement"
+     routerLinkActive="active-link"
+     [routerLinkActiveOptions]="{ exact: true }">
+    <mat-icon matListItemIcon>security</mat-icon>
+    <span matListItemTitle>Equipements</span>
+  </a>
+
+  <a mat-list-item 
+     routerLink="/admin/dotation"
+     routerLinkActive="active-link"
+     [routerLinkActiveOptions]="{ exact: true }">
+    <mat-icon matListItemIcon>inventory</mat-icon>
+    <span matListItemTitle>Dotations</span>
+  </a>
+
+</mat-nav-list>

@@ -3,10 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { Footer } from "./footer/footer";
 import { Header } from "./header/header";
 import { CommonModule, NgIf } from '@angular/common';
+import { Sidebar } from "./admin/sidebar/sidebar";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Footer, CommonModule],
+  imports: [RouterOutlet, Footer, CommonModule, Sidebar],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

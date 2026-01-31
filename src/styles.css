@@ -81,4 +81,22 @@ Le style du boite de dialog ==== */
   }
 }
 
+:root{
+
+  /* 🎨 Couleur principale */
+  --primary-gradient: linear-gradient(
+    135deg,
+    #e00e20,
+    #165283
+  );
+
+  --primary-color:#1976d2;
+}
+
+
+html, body{
+  height:100%;
+  margin:0;
+  padding:0;
+}
 

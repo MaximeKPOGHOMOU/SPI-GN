@@ -1,0 +1,48 @@
+<div class="form-container">
+
+    <h2 class="form-title">
+        {{ newClient.id ? 'MODIFIER UN CLIENT' : 'AJOUTER UN CLIENT' }}
+    </h2>
+
+    <!-- Prenom + Nom -->
+    <div class="form-row">
+        <mat-form-field class="flex-field" appearance="fill">
+            <mat-label>Prénom</mat-label>
+            <input matInput [(ngModel)]="newClient.first_name">
+        </mat-form-field>
+
+        <mat-form-field class="flex-field" appearance="fill">
+            <mat-label>Nom</mat-label>
+            <input matInput [(ngModel)]="newClient.last_name">
+        </mat-form-field>
+    </div>
+
+    <!-- Téléphone + Adresse -->
+    <div class="form-row">
+        <mat-form-field class="flex-field" appearance="fill">
+            <mat-label>Téléphone</mat-label>
+            <input matInput [(ngModel)]="newClient.telephone">
+        </mat-form-field>
+
+        <mat-form-field class="flex-field" appearance="fill">
+            <mat-label>Adresse</mat-label>
+            <input matInput [(ngModel)]="newClient.adresse">
+        </mat-form-field>
+    </div>
+
+
+    <!-- Actions -->
+    <div class="dialog-actions">
+        <button mat-raised-button color="primary" (click)="addClient()" [disabled]="loading" class="btn-with-spinner">
+            <span class="btn-text">
+                {{ loading ? (newClient.id ? 'Modification en cours...' : 'Ajout en cours...')
+                : (newClient.id ? 'Modifier' : 'Ajouter') }}
+            </span>
+        </button>
+
+        <button mat-stroked-button color="warn" (click)="close()">
+            Annuler
+        </button>
+    </div>
+
+</div>

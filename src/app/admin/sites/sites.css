@@ -1,0 +1,183 @@
+/* Toolbar */
+.mat-toolbar {
+  background: var(--primary-gradient);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+
+/* Mat-card */
+mat-card {
+  margin: 20px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  background-color: #fafafa;
+}
+
+mat-card h3 {
+  margin-bottom: 15px;
+  color: #1976d2;
+  font-weight: 600;
+}
+
+/* Card header */
+.card-header {
+  display: flex;
+  justify-content: space-between; /* titre à gauche, boutons à droite */
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.card-header h3 {
+  margin: 0;
+}
+
+/* Header actions (search + bouton) */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Table styling */
+.table-wrapper {
+  width: 100%;
+  max-height: 400px; /* limite la hauteur visible de la table */
+  overflow-y: auto;  /* scroll vertical uniquement pour la table */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Garder le header de la table fixe */
+table thead th {
+  position: sticky;
+  top: 0;
+  background-color: #1976d2;
+  z-index: 2;
+  color: #fff;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+td.mat-cell {
+  padding: 10px 8px;
+  font-size: 0.95rem;
+}
+
+/* Ombre table */
+.mat-elevation-z8 {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12) !important;
+}
+
+/* Boutons */
+button[mat-icon-button] {
+  transition: all 0.3s ease;
+}
+
+button[mat-icon-button]:hover {
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+button[mat-raised-button] {
+  margin-left: 10px;
+  font-weight: 600;
+}
+
+button[mat-raised-button] mat-icon {
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+/* Icon color */
+.icon-blue mat-icon {
+  color: #1976d2; /* bleu */
+}
+
+/* Spinner */
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100px; /* hauteur minimale pour que ça ne fasse pas sauter la mise en page */
+}
+
+.mat-toolbar.center-toolbar {
+  min-height: 60px;       /* réduit la hauteur */
+  height: 60px;           /* fixe la hauteur */
+  padding: 0 16px;        /* padding horizontal uniquement */
+  font-size: 1rem;        /* taille du texte */
+  display: flex;
+  align-items: center;    /* centrer verticalement le texte */
+}
+
+
+/* Center toolbar */
+.center-toolbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+   padding: 0;   /* 🔥 supprimer l'espace */
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  mat-card {
+    margin: 10px;
+    padding: 15px;
+  }
+
+  table {
+    font-size: 0.85rem;
+  }
+
+  button[mat-raised-button] {
+    font-size: 0.85rem;
+  }
+}
+
+
+/* 🔥 Texte des colonnes */
+.mat-mdc-header-cell {
+  color: #1976d2 !important;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.no-data-message {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #888;
+  padding: 40px 0;
+}
+
+.table-wrapper {
+  max-height: 400px; /* ou la hauteur que tu veux pour le scroll */
+  overflow-y: auto;  /* active le scroll vertical */
+  display: block;    /* nécessaire pour que overflow fonctionne */
+}
+
+.full-table {
+  width: 100%;
+  min-width: 600px; /* optionnel, si tu veux un minimum pour les colonnes */
+  border-collapse: collapse;
+}
+
+.no-data-message {
+  text-align: center;
+  padding: 20px;
+  color: #555;
+  font-weight: 500;
+}
+
+.mat-column-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;          /* espace entre les boutons */
+  flex-wrap: nowrap; /* empêche le retour à la ligne */
+}

@@ -1,10 +1,11 @@
 /* Toolbar */
 .mat-toolbar {
-  background: linear-gradient(to right, #1976d2, #42a5f5);
+  background: var(--primary-gradient);
   color: #fff;
   font-weight: 600;
   font-size: 1.2rem;
 }
+
 
 /* Mat-card */
 mat-card {
@@ -102,15 +103,26 @@ button[mat-raised-button] mat-icon {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 150px; /* hauteur minimale pour que ça ne fasse pas sauter la mise en page */
+  min-height: 100px; /* hauteur minimale pour que ça ne fasse pas sauter la mise en page */
 }
+
+.mat-toolbar.center-toolbar {
+  min-height: 60px;       /* réduit la hauteur */
+  height: 60px;           /* fixe la hauteur */
+  padding: 0 16px;        /* padding horizontal uniquement */
+  font-size: 1rem;        /* taille du texte */
+  display: flex;
+  align-items: center;    /* centrer verticalement le texte */
+}
+
 
 /* Center toolbar */
 .center-toolbar {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 30px 0;
+   padding: 0;   /* 🔥 supprimer l'espace */
+  margin: 0;
 }
 
 /* Responsive */
@@ -163,3 +175,10 @@ button[mat-raised-button] mat-icon {
   font-weight: 500;
 }
 
+
+.mat-column-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;          /* espace entre les boutons */
+  flex-wrap: nowrap; /* empêche le retour à la ligne */
+}

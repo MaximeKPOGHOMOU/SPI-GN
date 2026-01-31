@@ -1,0 +1,54 @@
+<div class="form-container">
+
+  <h2 class="form-title">
+    {{ newSite.id ? 'MODIFIER UN SITE' : 'AJOUTER UN SITE' }}
+  </h2>
+
+  <!-- Nom du site -->
+
+
+  <!-- Téléphone + Adresse -->
+  <div class="form-row">
+    <mat-form-field class="full-width" appearance="fill">
+      <mat-label>Nom du site</mat-label>
+      <input matInput [(ngModel)]="newSite.name">
+    </mat-form-field>
+
+    <mat-form-field class="flex-field" appearance="fill">
+      <mat-label>Adresse</mat-label>
+      <input matInput [(ngModel)]="newSite.adresse">
+    </mat-form-field>
+  </div>
+
+  <div class="form-row">
+    <mat-form-field class="full-width" appearance="fill">
+      <mat-label>Téléphone</mat-label>
+      <input matInput [(ngModel)]="newSite.telephone">
+    </mat-form-field>
+
+    <mat-form-field class="full-width" appearance="fill">
+      <mat-label>Client</mat-label>
+      <mat-select [(ngModel)]="newSite.client_id">
+        <mat-option *ngFor="let client of clients" [value]="client.id">
+          {{ client.first_name }} {{ client.last_name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+
+  <!-- Actions -->
+  <div class="dialog-actions">
+    <button mat-raised-button color="primary" (click)="addSite()" [disabled]="loading" >
+      <span class="btn-text">
+        {{ loading ? (newSite.id ? 'Modification en cours...' : 'Ajout en cours...')
+        : (newSite.id ? 'Modifier' : 'Ajouter') }}
+      </span>
+    </button>
+
+    <button mat-stroked-button color="warn" (click)="close()">
+      Annuler
+    </button>
+  </div>
+
+</div>

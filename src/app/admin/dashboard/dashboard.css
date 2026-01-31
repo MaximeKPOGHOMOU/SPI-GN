@@ -1,0 +1,70 @@
+.dashboard-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 20px;
+}
+
+.dashboard-block {
+  position: relative;
+  flex: 1 1 calc(25% - 20px); /* 4 blocs côte à côte */
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background-color: #fff;
+  color: #333;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+
+  /* Bordure gauche dégradé */
+  border-left: 2px solid;
+  border-left-color: transparent; /* fallback */
+  background-clip: padding-box; /* pour que le border-left reste visible */
+}
+
+/* Utilisation de la variable CSS pour le dégradé */
+.dashboard-block::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 6px; /* épaisseur de la bordure gauche */
+  height: 100%;
+  border-radius: 12px 0 0 12px; /* même arrondi que le bloc */
+  background: var(--left-border-gradient);
+}
+
+/* Contenu du bloc */
+.block-content {
+  margin-left: 10px; /* espace entre bordure et contenu */
+}
+
+.block-content h2 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.block-content p {
+  margin: 0;
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
+/* Hover subtil */
+.dashboard-block:hover {
+  transform: translateY(-3px);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .dashboard-block {
+    flex: 1 1 calc(50% - 20px);
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard-block {
+    flex: 1 1 100%;
+  }
+}

@@ -1,0 +1,117 @@
+<div class="dotations-container">
+
+    <mat-toolbar color="primary" class="center-toolbar">
+        <span>GESTION DES DOTATIONS</span>
+    </mat-toolbar>
+
+    <mat-card>
+
+        <div class="card-header">
+            <h3>LISTE DES DOTATIONS</h3>
+
+            <div class="header-actions">
+                <mat-form-field appearance="fill" class="search-field">
+                    <mat-label>Rechercher...</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Code, Agent, Site, Équipement…">
+                    <mat-icon matSuffix>search</mat-icon>
+                </mat-form-field>
+
+                <button mat-raised-button color="primary" (click)="openAddDotationDialog()">
+                    <mat-icon>add</mat-icon>
+                    Ajouter
+                </button>
+                <button mat-raised-button color="primary" (click)="printDotations()">
+                    <mat-icon>print</mat-icon>
+                    Imprimer
+                </button>
+            </div>
+        </div>
+
+        <div class="table-wrapper" *ngIf="!loading; else loadingTemplate">
+
+            <table mat-table [dataSource]="dotations" class="mat-elevation-z8 full-table"
+                *ngIf="dotations.data.length > 0; else noDataTemplate">
+
+                <!-- Index -->
+                <ng-container matColumnDef="index">
+                    <th mat-header-cell *matHeaderCellDef>N°</th>
+                    <td mat-cell *matCellDef="let d; let i = index">{{ i + 1 }}</td>
+                </ng-container>
+
+                <!-- Code -->
+                <ng-container matColumnDef="code">
+                    <th mat-header-cell *matHeaderCellDef>CODE</th>
+                    <td mat-cell *matCellDef="let d">{{ d.code }}</td>
+                </ng-container>
+
+                <!-- Agent -->
+                <ng-container matColumnDef="agent_name">
+                    <th mat-header-cell *matHeaderCellDef>AGENT</th>
+                    <td mat-cell *matCellDef="let d">
+                        {{ d.agent?.first_name }} {{ d.agent?.last_name }}
+                    </td>
+
+                </ng-container>
+
+                <!-- Site -->
+                <ng-container matColumnDef="site_name">
+                    <th mat-header-cell *matHeaderCellDef>SITE</th>
+                    <td mat-cell *matCellDef="let d">
+                        {{ d.site?.name || '-' }}
+                    </td>
+
+                </ng-container>
+
+                <!-- Équipement -->
+                <ng-container matColumnDef="equipement">
+                    <th mat-header-cell *matHeaderCellDef>ÉQUIPEMENT</th>
+                    <td mat-cell *matCellDef="let d">{{ d.equipement?.designation || '-' }}</td>
+                </ng-container>
+
+                <!-- Quantité -->
+                <ng-container matColumnDef="quantite">
+                    <th mat-header-cell *matHeaderCellDef>QUANTITÉ</th>
+                    <td mat-cell *matCellDef="let d">{{ d.quantite }}</td>
+                </ng-container>
+
+                <!-- Date de dotation -->
+                <ng-container matColumnDef="date_dotation">
+                    <th mat-header-cell *matHeaderCellDef>DATE</th>
+                    <td mat-cell *matCellDef="let d">{{ d.date_dotation | date:'shortDate' }}</td>
+                </ng-container>
+
+                <!-- Actions -->
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>ACTIONS</th>
+                    <td mat-cell *matCellDef="let d">
+                        <button mat-icon-button color="primary" (click)="openEditDialog(d)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button color="primary">
+                            <mat-icon>visibility</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <!-- Header et row -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+
+    </mat-card>
+
+ <ng-template #loadingTemplate>
+  <div class="spinner-container">
+    <mat-spinner [diameter]="50"></mat-spinner> <!-- plus petit -->
+  </div>
+</ng-template>
+
+
+    <ng-template #noDataTemplate>
+        <div class="no-data-message">
+            Aucune dotation disponible.
+        </div>
+    </ng-template>
+
+</div>

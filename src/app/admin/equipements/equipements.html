@@ -1,0 +1,110 @@
+<div class="equipements-container">
+
+    <mat-toolbar color="primary" class="center-toolbar">
+        <span>GESTION DES ÉQUIPEMENTS</span>
+    </mat-toolbar>
+
+    <mat-card>
+
+        <div class="card-header">
+            <h3>LISTE DES ÉQUIPEMENTS</h3>
+
+            <div class="header-actions">
+                <mat-form-field appearance="fill" class="search-field">
+                    <mat-label>Rechercher...</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Code, Désignation, Catégorie…">
+                    <mat-icon matSuffix>search</mat-icon>
+                </mat-form-field>
+
+                <button mat-raised-button color="primary" (click)="openAddEquipementDialog()">
+                    <mat-icon>add</mat-icon>
+                    Ajouter
+                </button>
+            </div>
+        </div>
+
+        <div class="table-wrapper" *ngIf="!loading; else loadingTemplate">
+
+            <table mat-table [dataSource]="equipements" class="mat-elevation-z8 full-table"
+                *ngIf="equipements.data.length > 0; else noDataTemplate">
+
+                <!-- Index -->
+                <ng-container matColumnDef="index">
+                    <th mat-header-cell *matHeaderCellDef>N°</th>
+                    <td mat-cell *matCellDef="let e; let i = index">{{ i + 1 }}</td>
+                </ng-container>
+
+                <!-- Code -->
+                <ng-container matColumnDef="code">
+                    <th mat-header-cell *matHeaderCellDef>CODE</th>
+                    <td mat-cell *matCellDef="let e">{{ e.code }}</td>
+                </ng-container>
+
+                <!-- Désignation -->
+                <ng-container matColumnDef="designation">
+                    <th mat-header-cell *matHeaderCellDef>DÉSIGNATION</th>
+                    <td mat-cell *matCellDef="let e">{{ e.designation }}</td>
+                </ng-container>
+
+                <!-- Catégorie -->
+                <ng-container matColumnDef="categorie">
+                    <th mat-header-cell *matHeaderCellDef>CATEGORIE</th>
+                    <td mat-cell *matCellDef="let e">{{ e.categorie || '-' }}</td>
+                </ng-container>
+
+                <!-- Type usage -->
+                <ng-container matColumnDef="type_usage">
+                    <th mat-header-cell *matHeaderCellDef>TYPE</th>
+                    <td mat-cell *matCellDef="let e">{{ e.type_usage || '-' }}</td>
+                </ng-container>
+
+                <!-- Stock  -->
+                <ng-container matColumnDef="quantity">
+                    <th mat-header-cell *matHeaderCellDef>QUANTITE</th>
+                    <td mat-cell *matCellDef="let e">{{ e.quantity }}</td>
+                </ng-container>
+                <!-- Status -->
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef>STATUS</th>
+                    <td mat-cell *matCellDef="let e">
+                        <span [ngStyle]="{'color': getStatusColor(e)}">
+                            {{ e.status }}
+                        </span>
+                    </td>
+                </ng-container>
+
+
+                <!-- Actions -->
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>ACTIONS</th>
+                    <td mat-cell *matCellDef="let e">
+                        <button mat-icon-button color="primary" (click)="openEditDialog(e)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+
+                    </td>
+                </ng-container>
+
+                <!-- Header et row -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            </table>
+        </div>
+
+    </mat-card>
+
+ <ng-template #loadingTemplate>
+  <div class="spinner-container">
+    <mat-spinner [diameter]="50"></mat-spinner> <!-- plus petit -->
+  </div>
+</ng-template>
+
+
+    <ng-template #noDataTemplate>
+        <div class="no-data-message">
+            Aucun équipement disponible.
+        </div>
+    </ng-template>
+
+</div>

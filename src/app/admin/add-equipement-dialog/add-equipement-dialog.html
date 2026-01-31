@@ -1,0 +1,54 @@
+<div class="form-container">
+
+  <h2 class="form-title">
+    {{ newEquipement.id ? 'MODIFIER UN ÉQUIPEMENT' : 'AJOUTER UN ÉQUIPEMENT' }}
+  </h2>
+
+  <!-- Désignation + Catégorie -->
+  <div class="form-row">
+    <mat-form-field class="flex-field" appearance="fill">
+      <mat-label>Désignation</mat-label>
+      <input matInput [(ngModel)]="newEquipement.designation">
+    </mat-form-field>
+
+    <mat-form-field class="flex-field" appearance="fill">
+      <mat-label>Catégorie</mat-label>
+      <mat-select [(ngModel)]="newEquipement.categorie">
+          <mat-option value="accessoire">Accessoire</mat-option>
+          <mat-option value="materiel">Materiel</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- Type usage + Stock minimum -->
+  <div class="form-row">
+    <mat-form-field class="flex-field" appearance="fill">
+      <mat-label>Type d'utilisation</mat-label>
+      <mat-select [(ngModel)]="newEquipement.type_usage">
+          <mat-option value="agent">Agent</mat-option>
+          <mat-option value="site">Site</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="flex-field" appearance="fill">
+      <mat-label>Quantité</mat-label>
+      <input matInput type="number" [(ngModel)]="newEquipement.quantity">
+    </mat-form-field>
+  </div>
+
+
+  <!-- Actions -->
+  <div class="dialog-actions">
+    <button mat-raised-button color="primary" (click)="addEquipement()" [disabled]="loading" class="btn-with-spinner">
+      <span class="btn-text">
+        {{ loading ? (newEquipement.id ? 'Modification en cours...' : 'Ajout en cours...')
+                   : (newEquipement.id ? 'Modifier' : 'Ajouter') }}
+      </span>
+    </button>
+
+    <button mat-stroked-button color="warn" (click)="close()">
+      Annuler
+    </button>
+  </div>
+
+</div>

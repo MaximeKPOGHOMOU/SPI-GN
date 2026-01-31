@@ -1,0 +1,56 @@
+/* LOGO ZONE */
+.sidebar-logo{
+  height: 60px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+
+/* LOGO IMAGE */
+.sidebar-logo img{
+  height: 42px;
+  object-fit: contain;
+}
+
+/* LOGO TEXTE */
+.logo-text{
+  font-size: 22px;
+  font-weight: bold;
+  color: white;
+  letter-spacing: 1px;
+}
+mat-nav-list{
+  margin-top: 10px;
+}
+/* Onglet actif */
+.active-link {
+  background: var(--primary-gradient);
+  color: #fff !important;
+  border-radius: 0 12px 12px 0;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  transition: none;
+}
+
+/* Icône en blanc pour l'actif */
+.active-link mat-icon {
+  color: #fff !important;
+}
+/* Icône en blanc pour l'actif */
+.active-link span {
+  color: #fff !important;
+  font-weight: 400;
+}
+
+/* Supprimer tout effet au survol sur tous les liens */
+.mat-mdc-list-item:hover,
+.mat-list-item:hover,
+.mat-list-item.cdk-focused,
+.mat-list-item.cdk-program-focused {
+  background-color: transparent !important; /* plus de couleur verte */
+  color: inherit !important;
+}

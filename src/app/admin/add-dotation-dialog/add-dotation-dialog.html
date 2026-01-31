@@ -1,0 +1,57 @@
+<div class="form-container">
+
+  <h2 class="form-title">
+    {{ newDotation.id ? 'MODIFIER UNE DOTATION' : 'AJOUTER UNE DOTATION' }}
+  </h2>
+
+  <!-- Agent + Site -->
+  <div class="form-row">
+    <mat-form-field class="flex-field" appearance="fill">
+      <mat-label>Agent</mat-label>
+      <mat-select [(ngModel)]="newDotation.agent_id">
+        <mat-option *ngFor="let agent of agents" [value]="agent.id">
+          {{ agent.first_name }} {{ agent.last_name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="flex-field" appearance="fill">
+      <mat-label>Site</mat-label>
+      <mat-select [(ngModel)]="newDotation.site_id">
+        <mat-option *ngFor="let s of sites" [value]="s.id">{{ s.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- Équipement + Quantité -->
+  <div class="form-row">
+    <mat-form-field class="flex-field" appearance="fill">
+      <mat-label>Équipement</mat-label>
+      <mat-select [(ngModel)]="newDotation.equipement_id">
+        <mat-option *ngFor="let eq of equipements" [value]="eq.id">
+          {{ eq.designation }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="flex-field" appearance="fill">
+      <mat-label>Quantité</mat-label>
+      <input matInput type="number" min="1" [(ngModel)]="newDotation.quantite">
+    </mat-form-field>
+  </div>
+
+  <!-- Actions -->
+  <div class="dialog-actions">
+    <button mat-raised-button color="primary" (click)="saveDotation()" [disabled]="loading" class="btn-with-spinner">
+      <span class="btn-text">
+        {{ loading ? (newDotation.id ? 'Modification en cours...' : 'Ajout en cours...')
+        : (newDotation.id ? 'Modifier' : 'Ajouter') }}
+      </span>
+    </button>
+
+    <button mat-stroked-button color="warn" (click)="close()">
+      Annuler
+    </button>
+  </div>
+
+</div>
