@@ -68,3 +68,17 @@
     flex: 1 1 100%;
   }
 }
+.dashboard-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 0 20px 0 20px;
+
+  /* Dégradé */
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* Pour compatibilité Firefox */
+  background-clip: text;
+  color: transparent;
+}

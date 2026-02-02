@@ -62,40 +62,74 @@ export class AddDotationDialog implements OnInit {
   }
 
 async saveDotation() {
-  if (!this.newDotation.agent_id || !this.newDotation.site_id || !this.newDotation.equipement_id || !this.newDotation.quantite) {
+
+  if (!this.newDotation.agent_id || 
+      !this.newDotation.site_id || 
+      !this.newDotation.equipement_id || 
+      !this.newDotation.quantite) {
+
     this.showToast('Veuillez remplir tous les champs obligatoires', 'error');
     return;
   }
 
   try {
+
     this.loading = true;
 
-    // Payload strictement pour la table
-    const payload = {
-      agent_id: this.newDotation.agent_id,
-      site_id: this.newDotation.site_id,
-      equipement_id: this.newDotation.equipement_id,
-      quantite: this.newDotation.quantite,
-      code: this.newDotation.code,
-      date_dotation: this.newDotation.date_dotation
-    };
+    // 🔥 Vérifier le stock AVANT
+    const equipement = this.equipements.find(
+      e => e.id === this.newDotation.equipement_id
+    );
 
-    if (this.newDotation.id) {
-      await this.supabaseService.updateDemande(this.newDotation.id, payload);
-      this.showToast('Dotation modifiée avec succès !', 'success');
-    } else {
-      payload.code = await this.supabaseService.generateDemandeCode();
-      await this.supabaseService.addDemande(payload);
-      this.showToast('Dotation ajoutée avec succès !', 'success');
+    if (!equipement) {
+      this.showToast("Équipement introuvable", 'error');
+      return;
     }
 
+    if ((equipement.quantity ?? 0) < this.newDotation.quantite) {
+      this.showToast("Stock insuffisant !", 'error');
+      return;
+    }
+
+const payload = {
+  agent_id: this.newDotation.agent_id,
+  site_id: this.newDotation.site_id,
+  equipement_id: this.newDotation.equipement_id,
+  quantite: this.newDotation.quantite,
+  code: this.newDotation.code,
+  date_dotation: this.newDotation.date_dotation ?? new Date().toISOString()
+};
+
+    if (this.newDotation.id) {
+
+      // UPDATE
+      await this.supabaseService.updateDemande(this.newDotation.id, payload);
+
+    } else {
+
+      // INSERT
+      payload.code = await this.supabaseService.generateDemandeCode();
+      await this.supabaseService.addDemande(payload);
+
+      // 🔥 DIMINUER LE STOCK AUTOMATIQUEMENT
+      await this.supabaseService.decreaseEquipementStock(
+        payload.equipement_id,
+        payload.quantite
+      );
+    }
+
+    this.showToast('Dotation enregistrée avec succès !', 'success');
     this.dialogRef.close(true);
 
   } catch (err) {
+
     console.error('Erreur ajout/modification dotation :', err);
     this.showToast('Impossible de sauvegarder la dotation', 'error');
+
   } finally {
+
     this.loading = false;
+
   }
 }
 

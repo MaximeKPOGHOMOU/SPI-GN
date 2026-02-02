@@ -30,26 +30,6 @@
     </mat-form-field>
   </div>
 
-  <!-- Fonction + Role -->
-  <div class="form-row">
-
-    <mat-form-field class="flex-field" appearance="fill">
-      <mat-label>Site</mat-label>
-      <mat-select [(ngModel)]="newAgent.site_id">
-        <mat-option *ngFor="let s of sites" [value]="s.id">{{ s.name }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-
-    <mat-form-field class="flex-field" appearance="fill">
-      <mat-label>Rôle</mat-label>
-      <mat-select [(ngModel)]="newAgent.role">
-        <mat-option value="agent">Agent</mat-option>
-        <mat-option value="admin">Admin</mat-option>
-        <mat-option value="superviseur">Superviseur</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
 
   <div class="dialog-actions">
     <button mat-raised-button color="primary" (click)="addAgent()" [disabled]="loading" class="btn-with-spinner">

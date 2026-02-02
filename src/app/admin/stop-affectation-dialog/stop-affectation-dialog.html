@@ -1,0 +1,32 @@
+<div class="form-container">
+
+  <h2 class="form-title">
+    ARRETER L'AFFECTATION
+  </h2>
+
+  <!-- Agent -->
+  <div class="form-row">
+
+  </div>
+ <div class="form-row">
+</div>
+<!-- Date fin -->
+<mat-form-field appearance="outline" style="width: 100%;">
+    <mat-label>Date de fin</mat-label>
+    <input
+      matInput
+      type="date"
+      [(ngModel)]="date_fin"
+      [min]="affectation.date_debut"
+    >
+    <mat-hint>La date doit être ≥ date début</mat-hint>
+  </mat-form-field>
+
+
+
+  <div class="dialog-actions">
+    <button mat-stroked-button color="primary" (click)="cancel()">Annuler</button>
+    <button mat-raised-button color="warn" (click)="confirm()">Terminer</button>
+  </div>
+
+</div>

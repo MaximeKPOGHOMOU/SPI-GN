@@ -27,11 +27,16 @@ mat-card h3 {
   display: flex;
   justify-content: space-between; /* titre à gauche, boutons à droite */
   align-items: center;
-  margin-bottom: 15px;
+  background: transparent;
+  border-bottom: none;
 }
 
 .card-header h3 {
   margin: 0;
+      /* Dégradé */
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* Header actions (search + bouton) */
@@ -107,23 +112,42 @@ button[mat-raised-button] mat-icon {
 }
 
 .mat-toolbar.center-toolbar {
-  min-height: 60px;       /* réduit la hauteur */
-  height: 60px;           /* fixe la hauteur */
-  padding: 0 16px;        /* padding horizontal uniquement */
-  font-size: 1rem;        /* taille du texte */
+  min-height: 60px;       
+  height: 60px;           
+  padding: 0 16px;        
+  font-size: 1rem;       
   display: flex;
-  align-items: center;    /* centrer verticalement le texte */
+  align-items: center;    
 }
 
 
 /* Center toolbar */
 .center-toolbar {
   display: flex;
-  justify-content: center;
-  align-items: center;
-   padding: 0;   /* 🔥 supprimer l'espace */
+  justify-content: flex-start;
+  padding: 0;   
   margin: 0;
+  
 }
+
+.toolbar-spacer {
+  flex: 1; /* 🔥 pousse les boutons à droite */
+}
+
+.toolbar-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.btn-red {
+  background-color: #ef5350 !important;
+  color: #fff !important;
+}
+
+.btn-red mat-icon {
+  color: #fff;
+}
+
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -176,8 +200,29 @@ button[mat-raised-button] mat-icon {
 }
 
 .mat-column-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;          /* espace entre les boutons */
-  flex-wrap: nowrap; /* empêche le retour à la ligne */
+  align-items: flex-start; /* aligne en haut de la cellule */
+  gap: 8px;
+  flex-wrap: nowrap;
 }
+/* ===== Positionnement du titre GESTION DES AGENTS ===== */
+
+.page-title {
+  position: relative;
+  margin: 20px 20px -35px 20px; /* ⬇️ descend + chevauche la card */
+  border-radius: 8px 8px 0 0;
+  z-index: 5;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  width: calc(100% - 40px); /* aligné exactement avec la card */
+}
+
+/* Laisse la card respirer sous le titre */
+.table-card {
+  padding-top: 100px;
+}
+
+/* Champ de recherche Material */
+mat-form-field.search-field {
+  width: 200px; /* largeur du champ */
+  height: 70px;
+}
+

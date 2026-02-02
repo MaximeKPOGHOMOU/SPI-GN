@@ -7,7 +7,7 @@ import { Sidebar } from "./admin/sidebar/sidebar";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Footer, CommonModule, Sidebar],
+  imports: [RouterOutlet, Footer, CommonModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

@@ -146,11 +146,47 @@ export class Equipements implements OnInit {
 
   getStatusColor(e: Equipement): string {
     switch (e.status) {
-      case 'disponible': return 'green';
+      case 'disponible': return 'green ';
       case 'attention': return 'orange';
       case 'indisponible': return 'red';
       default: return 'black';
     }
+  }
+
+  // 🔹 Imprimer la liste des sites
+  printEquippements() {
+    const tableElement = document.querySelector('.full-table') as HTMLElement;
+    if (!tableElement) return this.showToast('Aucun tableau à imprimer', 'error');
+
+    const printWindow = window.open('', '', 'width=900,height=700');
+    if (!printWindow) return this.showToast('Impossible d’ouvrir la fenêtre d’impression', 'error');
+
+    const htmlContent = `
+      <html>
+        <head>
+          <title>Liste des equippements</title>
+          <style>
+            table { width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; }
+            th, td { border: 1px solid #000; padding: 8px; text-align: left; }
+            th { background-color: #1976d2; color: white; }
+            h2 { text-align: center; font-family: Arial, sans-serif; }
+            button { display: none; } /* supprime les boutons lors de l'impression */
+          </style>
+        </head>
+        <body>
+          <h2>Liste des equippements</h2>
+          ${tableElement.outerHTML}
+        </body>
+      </html>
+    `;
+
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
+    printWindow.onload = () => {
+      printWindow.focus();
+      printWindow.print();
+      printWindow.close();
+    };
   }
 
 

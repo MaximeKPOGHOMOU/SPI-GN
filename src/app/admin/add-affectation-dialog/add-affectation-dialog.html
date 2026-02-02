@@ -1,0 +1,59 @@
+<div class="form-container">
+
+  <h2 class="form-title">
+    {{ affectation.id ? 'MODIFIER UNE AFFECTATION' : 'AJOUTER UNE AFFECTATION' }}
+  </h2>
+
+  <!-- Agent -->
+  <div class="form-row">
+    <mat-form-field appearance="fill">
+      <mat-label>Agent</mat-label>
+      <mat-select [(ngModel)]="affectation.agent_id" name="agent_id" [compareWith]="compareById">
+        <mat-option *ngFor="let agent of agents" [value]="agent.id">
+          {{ agent.first_name }} {{ agent.last_name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Site</mat-label>
+      <mat-select [(ngModel)]="affectation.site_id" [compareWith]="compareById">
+        <mat-option *ngFor="let site of sites" [value]="site.id">
+          {{ site.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+  </div>
+ <div class="form-row">
+  <!-- Date début -->
+  <mat-form-field appearance="fill">
+    <mat-label>Date début</mat-label>
+    <input matInput [(ngModel)]="affectation.date_debut" type="date" name="date_debut">
+  </mat-form-field>
+
+  <!-- Date fin -->
+  <mat-form-field appearance="fill">
+    <mat-label>Date fin</mat-label>
+    <input matInput [(ngModel)]="affectation.date_fin" type="date">
+  </mat-form-field>
+</div>
+
+
+
+
+  <div class="dialog-actions">
+    <button mat-raised-button color="primary" (click)="saveAffectation()" [disabled]="loading" class="btn-with-spinner">
+      <span class="btn-text">
+        {{ loading ? (affectation.id ? 'Modification en cours...' : 'Ajout en cours...')
+        : (affectation.id ? 'Modifier' : 'Ajouter') }}
+      </span>
+    </button>
+
+    <button mat-stroked-button color="warn" (click)="close()">
+      Annuler
+    </button>
+  </div>
+
+</div>

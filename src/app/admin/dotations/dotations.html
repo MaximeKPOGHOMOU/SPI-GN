@@ -1,31 +1,36 @@
 <div class="dotations-container">
 
-    <mat-toolbar color="primary" class="center-toolbar">
-        <span>GESTION DES DOTATIONS</span>
-    </mat-toolbar>
+
+      <div class="card-header">
+    <h3> GESTION DES DOTATIONS</h3>
+
+    <div class="header-actions">
+      <!-- Recherche -->
+      <mat-form-field appearance="fill" class="search-field">
+        <mat-label>Rechercher...</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Nom, Prénom, Téléphone…">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+    </div>
+  </div>
+
+  <mat-toolbar color="primary" class="center-toolbar page-title">
+    <span>LISTE DES DOTATIONS</span>
+    <span class="toolbar-spacer"></span>
+    <button mat-raised-button class="btn-red" (click)="openAddDotationDialog()">
+      <mat-icon>person_add</mat-icon>
+      Ajouter
+    </button>
+    <button mat-raised-button class="btn-red" (click)="printDotations()">
+      <mat-icon>print</mat-icon>
+      Imprimer
+    </button>
+  </mat-toolbar>
+
 
     <mat-card>
 
-        <div class="card-header">
-            <h3>LISTE DES DOTATIONS</h3>
-
-            <div class="header-actions">
-                <mat-form-field appearance="fill" class="search-field">
-                    <mat-label>Rechercher...</mat-label>
-                    <input matInput (keyup)="applyFilter($event)" placeholder="Code, Agent, Site, Équipement…">
-                    <mat-icon matSuffix>search</mat-icon>
-                </mat-form-field>
-
-                <button mat-raised-button color="primary" (click)="openAddDotationDialog()">
-                    <mat-icon>add</mat-icon>
-                    Ajouter
-                </button>
-                <button mat-raised-button color="primary" (click)="printDotations()">
-                    <mat-icon>print</mat-icon>
-                    Imprimer
-                </button>
-            </div>
-        </div>
 
         <div class="table-wrapper" *ngIf="!loading; else loadingTemplate">
 
@@ -106,7 +111,6 @@
     <mat-spinner [diameter]="50"></mat-spinner> <!-- plus petit -->
   </div>
 </ng-template>
-
 
     <ng-template #noDataTemplate>
         <div class="no-data-message">

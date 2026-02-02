@@ -1,35 +1,35 @@
 <div class="clients-container">
 
-  <mat-toolbar color="primary" class="center-toolbar">
-    <span>GESTION DES CLIENTS</span>
-  </mat-toolbar>
+  <div class="card-header">
+    <h3> GESTION DES CLIENTS</h3>
 
+    <div class="header-actions">
+      <!-- Recherche -->
+      <mat-form-field appearance="fill" class="search-field">
+        <mat-label>Rechercher...</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Nom, Prénom, Téléphone…">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+    </div>
+  </div>
+
+
+  <mat-toolbar color="primary" class="center-toolbar page-title">
+    <span>LISTE DES CLIENTS</span>
+    <span class="toolbar-spacer"></span>
+    <button mat-raised-button class="btn-red" (click)="openAddClientDialog()">
+      <mat-icon>person_add</mat-icon>
+      Ajouter
+    </button>
+    <button mat-raised-button class="btn-red" (click)="printClients()">
+      <mat-icon>print</mat-icon>
+      Imprimer
+    </button>
+  </mat-toolbar>
   <mat-card>
 
-    <div class="card-header">
-      <h3>LISTE DES CLIENTS</h3>
 
-      <div class="header-actions">
-        <!-- Recherche -->
-        <mat-form-field appearance="fill" class="search-field">
-          <mat-label>Rechercher...</mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Nom, Prénom, Téléphone…">
-          <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
-
-        <!-- Ajouter client -->
-        <button mat-raised-button color="primary" (click)="openAddClientDialog()">
-          <mat-icon>person_add</mat-icon>
-          Ajouter
-        </button>
-
-        <!-- Imprimer -->
-        <button mat-raised-button color="primary" (click)="printClients()">
-          <mat-icon>print</mat-icon>
-          Imprimer
-        </button>
-      </div>
-    </div>
 
     <div class="table-wrapper" *ngIf="!loading; else loadingTemplate">
 
@@ -72,15 +72,22 @@
           <td mat-cell *matCellDef="let c">{{ c.adresse }}</td>
         </ng-container>
 
-        <!-- Status -->
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>STATUS</th>
-          <td mat-cell *matCellDef="let c">
-            <mat-slide-toggle [checked]="c.status" (change)="toggleStatus(c, $event)" color="primary">
-              {{ c.status ? 'Actif' : 'Inactif' }}
-            </mat-slide-toggle>
-          </td>
-        </ng-container>
+<!-- Status -->
+<ng-container matColumnDef="status">
+  <th mat-header-cell *matHeaderCellDef>STATUS</th>
+  <td mat-cell *matCellDef="let c">
+    <div class="status-container">
+      <mat-slide-toggle 
+        [checked]="c.status" 
+        (change)="toggleStatus(c, $event)" 
+        color="primary">
+      </mat-slide-toggle>
+      <span [ngClass]="c.status ? 'active' : 'inactive'">
+        {{ c.status ? 'Actif' : 'Inactif' }}
+      </span>
+    </div>
+  </td>
+</ng-container>
 
 
         <!-- Actions -->
@@ -106,11 +113,11 @@
   </mat-card>
 
   <!-- Spinner -->
- <ng-template #loadingTemplate>
-  <div class="spinner-container">
-    <mat-spinner [diameter]="50"></mat-spinner> <!-- plus petit -->
-  </div>
-</ng-template>
+  <ng-template #loadingTemplate>
+    <div class="spinner-container">
+      <mat-spinner [diameter]="50"></mat-spinner> <!-- plus petit -->
+    </div>
+  </ng-template>
 
 
   <!-- Pas de données -->

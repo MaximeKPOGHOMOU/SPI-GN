@@ -11,6 +11,7 @@ import { Equipements } from './admin/equipements/equipements';
 import { Dotations } from './admin/dotations/dotations';
 import { Dashboard } from './admin/dashboard/dashboard';
 import { Layout } from './admin/layout/layout';
+import { Affectations } from './admin/affectations/affectations';
 
 export const routes: Routes = [
 
@@ -27,6 +28,7 @@ export const routes: Routes = [
       { path: 'site', component: Sites },
       { path: 'equipement', component: Equipements },
       { path: 'dotation', component: Dotations },
+      { path: 'affectation', component: Affectations },
 
     ]
   },

@@ -33,7 +33,7 @@ mat-card h3 {
 
 .card-header h3 {
   margin: 0;
-     /* Dégradé */
+      /* Dégradé */
   background: var(--primary-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -225,4 +225,11 @@ mat-form-field.search-field {
   width: 200px; /* largeur du champ */
   height: 70px;
 }
+
+.text-green {
+  color: green;
+  font-weight: bold; /* optionnel, pour plus de visibilité */
+}
+
+
 

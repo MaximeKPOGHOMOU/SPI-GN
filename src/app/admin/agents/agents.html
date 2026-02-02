@@ -1,33 +1,34 @@
 <div class="agents-container">
 
-  <mat-toolbar color="primary" class="center-toolbar">
-    <span>GESTION DES AGENTS</span>
+  <div class="card-header">
+    <h3>GESTION DES AGENTS</h3>
+
+    <div class="header-actions">
+      <mat-form-field appearance="fill" class="search-field">
+        <mat-label>Rechercher...</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Nom, Prénom, Téléphone…">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+    </div>
+  </div>
+
+  <mat-toolbar color="primary" class="center-toolbar page-title">
+    <span>LISTE DES AGENTS</span>
+    <span class="toolbar-spacer"></span>
+    <button mat-raised-button class="btn-red" (click)="openAddAgentDialog()">
+      <mat-icon>person_add</mat-icon>
+      Ajouter
+    </button>
+    <button mat-raised-button class="btn-red" (click)="printAgents()">
+      <mat-icon>print</mat-icon>
+      Imprimer
+    </button>
   </mat-toolbar>
 
 
   <mat-card>
 
-    <div class="card-header">
-      <h3>LISTE DES AGENTS</h3>
-
-      <div class="header-actions">
-        <mat-form-field appearance="fill" class="search-field">
-          <mat-label>Rechercher...</mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Nom, Prénom, Téléphone…">
-          <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
-
-        <button mat-raised-button color="primary" (click)="openAddAgentDialog()">
-          <mat-icon>person_add</mat-icon>
-          Ajouter
-        </button>
-        <button mat-raised-button color="primary" (click)="printAgents()">
-  <mat-icon>print</mat-icon>
-  Imprimer
-</button>
-
-      </div>
-    </div>
 
 
     <div class="table-wrapper " *ngIf="!loading; else loadingTemplate">
@@ -72,25 +73,20 @@
           <td mat-cell *matCellDef="let agent"> {{ agent.adresse }} </td>
         </ng-container>
 
-        <!-- Site -->
-        <ng-container matColumnDef="site">
-          <th mat-header-cell *matHeaderCellDef>SITE</th>
-          <td mat-cell *matCellDef="let agent">
-            {{ agent.site?.name || agent.site_id || '-' }}
-          </td>
-        </ng-container>
 
-
-        <!-- Status -->
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef>STATUS</th>
-          <td mat-cell *matCellDef="let a">
-            <mat-slide-toggle [checked]="a.status" (change)="toggleStatus(a, $event)" color="primary">
+          <td mat-cell *matCellDef="let a" class="status-cell">
+            <mat-icon class="status-icon" [ngClass]="a.status ? 'actif' : 'inactif'">
+              {{ a.status ? 'check_circle' : 'cancel' }}
+            </mat-icon>
+            <span class="status-text" [ngClass]="a.status ? 'actif' : 'inactif'" style="font-weight: 600;">
               {{ a.status ? 'Actif' : 'Inactif' }}
-            </mat-slide-toggle>
-
+            </span>
           </td>
         </ng-container>
+
+
 
 
         <!-- Actions -->
@@ -119,11 +115,11 @@
 
   </mat-card>
 
- <ng-template #loadingTemplate>
-  <div class="spinner-container">
-    <mat-spinner [diameter]="50"></mat-spinner> <!-- plus petit -->
-  </div>
-</ng-template>
+  <ng-template #loadingTemplate>
+    <div class="spinner-container">
+      <mat-spinner [diameter]="50"></mat-spinner> <!-- plus petit -->
+    </div>
+  </ng-template>
 
 
   <ng-template #noDataTemplate>

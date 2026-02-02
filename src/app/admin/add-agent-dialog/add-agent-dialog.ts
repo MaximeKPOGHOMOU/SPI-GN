@@ -26,10 +26,8 @@ export class AddAgentDialog {
     last_name: '',
     telephone: '',
     adresse: '',
-    site_id: '',
     matricule: '',
-    role: 'agent',
-    status: true,
+    status: false,
   };
 
   constructor(
@@ -54,49 +52,65 @@ export class AddAgentDialog {
     }
   }
 
-  async addAgent() {
-    if (!this.newAgent.first_name || !this.newAgent.last_name ||
-      !this.newAgent.telephone || !this.newAgent.adresse || !this.newAgent.site_id) {
-      this.showToast('Veuillez remplir tous les champs', 'error');
-      return;
-    }
+async addAgent() {
+  if (!this.newAgent.first_name || !this.newAgent.last_name ||
+      !this.newAgent.telephone || !this.newAgent.adresse) {
+    this.showToast('Veuillez remplir tous les champs', 'error');
+    return;
+  }
 
-    try {
-      this.loading = true;
+  try {
+    this.loading = true;
 
-      if (this.newAgent.id) {
-        await this.supabaseService.updateAgent(this.newAgent.id, this.newAgent);
-        this.showToast('Agent modifié avec succès !', 'success');
-      } else {
-        const matricule = await this.supabaseService.generateMatricule(
+    if (this.newAgent.id) {
+      // ✅ Si prénom ou nom modifié, recalculer le matricule
+      const existingAgent = await this.supabaseService.getAgents();
+      const oldAgent = existingAgent.find(a => a.id === this.newAgent.id);
+
+      if (oldAgent && (oldAgent.first_name !== this.newAgent.first_name || oldAgent.last_name !== this.newAgent.last_name)) {
+        this.newAgent.matricule = await this.supabaseService.generateMatricule(
           this.newAgent.first_name, this.newAgent.last_name
         );
-        this.newAgent.matricule = matricule;
-
-        await this.supabaseService.addAgent(this.newAgent);
-        this.showToast('Agent ajouté avec succès !', 'success');
       }
 
-      this.dialogRef.close(true);
+      await this.supabaseService.updateAgent(this.newAgent.id, this.newAgent);
+      this.showToast('Agent modifié avec succès !', 'success');
 
-    } catch (err) {
-      console.error('Erreur ajout/modification agent :', err);
-      this.showToast('Impossible de sauvegarder l’agent', 'error');
-    } finally {
-      this.loading = false;
+    } else {
+      // ✅ Nouveau agent
+      const matricule = await this.supabaseService.generateMatricule(
+        this.newAgent.first_name, this.newAgent.last_name
+      );
+      this.newAgent.matricule = matricule;
+
+      await this.supabaseService.addAgent(this.newAgent);
+      this.showToast('Agent ajouté avec succès !', 'success');
     }
+
+    this.dialogRef.close(true);
+
+  } catch (err) {
+    console.error('Erreur ajout/modification agent :', err);
+    this.showToast('Impossible de sauvegarder l’agent', 'error');
+  } finally {
+    this.loading = false;
   }
+}
 
   close() {
     this.dialogRef.close(false);
   }
 
-  showToast(message: string, type: 'success' | 'error' = 'success') {
-    this.snackBar.open(message, 'OK', {
-      duration: 3000,
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
-      panelClass: type === 'success' ? ['snackbar-success'] : ['snackbar-error']
-    });
-  }
+showToast(message: string, type: 'success' | 'error' = 'success') {
+  this.snackBar.open(message, 'OK', {
+    duration: 3000,
+    horizontalPosition: 'right',
+    verticalPosition: 'top',
+    panelClass: type === 'success'
+      ? ['snackbar-success']
+      : ['snackbar-error']
+  });
+}
+
+
 }
