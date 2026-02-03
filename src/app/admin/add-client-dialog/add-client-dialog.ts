@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Client } from '../../models/client';
 import { SupabaseService } from '../../services/supabase';
@@ -44,6 +44,7 @@ export class AddClientDialog {
     private dialogRef: MatDialogRef<AddClientDialog>,
     private supabaseService: SupabaseService,
     private snackBar: MatSnackBar,
+     private cdr: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) public data?: Client
   ) {
     if (data) {
@@ -54,9 +55,8 @@ export class AddClientDialog {
   async addClient() {
     // Vérification des champs obligatoires
     if (!this.newClient.first_name || 
-        !this.newClient.last_name || 
-        !this.newClient.telephone ||
-        !this.newClient.adresse) {
+        !this.newClient.last_name
+        ) {
       this.showToast('Veuillez remplir tous les champs', 'error');
       return;
     }
@@ -80,7 +80,7 @@ export class AddClientDialog {
         await this.supabaseService.addClient(this.newClient);
         this.showToast('Client ajouté avec succès !', 'success');
       }
-
+      this.cdr.detectChanges();
       this.dialogRef.close(true);
 
     } catch (err) {

@@ -1,0 +1,127 @@
+/* Global */
+.login-wrapper {
+  height: 100vh;
+  display: flex;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* FORMULAIRE */
+.login-form-section {
+  flex: 1;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 360px;
+}
+
+.login-form h2 {
+  font-size: 28px;
+  margin-bottom: 6px;
+  color:var(--primary-gradient);
+}
+
+.subtitle {
+  color: #777;
+  margin-bottom: 30px;
+}
+
+/* Inputs */
+.input-group {
+  margin-bottom: 16px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.input-group input:focus {
+  border-color: #1976d2;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(25,118,210,0.15);
+}
+
+/* Button */
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--primary-gradient);;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  box-shadow: 0 10px 25px rgba(25,118,210,0.4);
+  transform: translateY(-1px);
+}
+
+/* Footer */
+.footer {
+  margin-top: 30px;
+  font-size: 12px;
+  color: #aaa;
+  text-align: center;
+}
+
+/* IMAGE */
+.login-image-section {
+  flex: 1;
+  background-image: url('/assets/images/agent_3.jpeg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.login-image-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6));
+}
+
+/* Overlay text */
+.overlay {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.overlay h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.overlay p {
+  font-size: 16px;
+  opacity: 0.85;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .login-image-section {
+    display: none;
+  }
+
+  .login-form-section {
+    flex: 1;
+  }
+}

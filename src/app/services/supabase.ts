@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
 import { Agent } from '../models/agent';
 import { Client } from '../models/client';
@@ -565,6 +565,51 @@ async updateAffectation(
   return data;
 }
 
+  // Login et récupération du profil métier
+  async login(email: string, password: string): Promise<User> {
+    // 1️⃣ Connexion via Supabase Auth
+    const { data, error } = await this.supabase.auth.signInWithPassword({ email, password });
+    if (error) throw error;
 
+    const authUser = data.user;
+    if (!authUser) throw new Error('Utilisateur non trouvé');
+
+    // 2️⃣ Récupérer le profil complet depuis la table `users`
+    const { data: userData, error: userError } = await this.supabase
+      .from('users')
+      .select('*')
+      .eq('id', authUser.id)
+      .single();
+
+    if (userError || !userData) throw userError || new Error('Profil non trouvé');
+
+    // 3️⃣ Cast explicite vers ton interface User
+    return userData as User;
+  }
+
+  // Déconnexion
+  async logout() {
+    await this.supabase.auth.signOut();
+    localStorage.removeItem('user');
+  }
+
+  // Récupérer le profil complet dans la table users
+  async getUserProfile(authId: string): Promise<User> {
+    const { data, error } = await this.supabase
+      .from('users')
+      .select('*')
+      .eq('id', authId)
+      .single();
+
+    if (error) throw error;
+    return data as User;
+  }
+
+  // Récupérer le user connecté depuis Supabase
+  async getCurrentUserProfile(): Promise<User | null> {
+    const { data } = await this.supabase.auth.getSession();
+    if (!data.session?.user) return null;
+    return this.getUserProfile(data.session.user.id);
+  }
 
 }

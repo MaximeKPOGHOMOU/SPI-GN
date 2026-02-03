@@ -54,7 +54,7 @@ export class AddAgentDialog {
 
 async addAgent() {
   if (!this.newAgent.first_name || !this.newAgent.last_name ||
-      !this.newAgent.telephone || !this.newAgent.adresse) {
+      !this.newAgent.telephone ) {
     this.showToast('Veuillez remplir tous les champs', 'error');
     return;
   }
