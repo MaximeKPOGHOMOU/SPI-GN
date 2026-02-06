@@ -15,7 +15,8 @@ import { Client } from '../../models/client';
 import { SupabaseService } from '../../services/supabase';
 import { AddClientDialog } from '../add-client-dialog/add-client-dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatSlideToggle, MatSlideToggleChange, MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/slide-toggle';
+
 
 @Component({
   selector: 'app-clients',

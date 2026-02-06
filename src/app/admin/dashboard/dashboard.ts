@@ -5,10 +5,14 @@ import { Client } from '../../models/client';
 import { Site } from '../../models/site';
 import { Equipement } from '../../models/equipement';
 import { Dotation } from '../../models/dotation';
+import { Router, RouterModule } from '@angular/router';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { Utilisateur } from '../../models/utilsateur';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [],
+  imports: [RouterModule, MatIconModule, MatMenuModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -17,17 +21,16 @@ public agentsCount = 0;       // ✅ public pour template
   public clientsCount = 0;
   public sitesCount = 0;
   public demandeCount = 0;
-
   loadingAgents = true;
+   currentUser: Utilisateur | null = null;
 
+  constructor(private supabaseService: SupabaseService,     private cdr: ChangeDetectorRef, private router: Router) {}
 
-  constructor(private supabaseService: SupabaseService,     private cdr: ChangeDetectorRef) {}
-
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.loadCounts();
     this.cdr.detectChanges();    // Force la détection des changements
+      this.currentUser = await this.supabaseService.getCurrentUser();
   }
-
 async loadCounts() {
   try {
     const agents: Agent[] = await this.supabaseService.getAgents();
@@ -50,6 +53,12 @@ async loadCounts() {
     console.error('Erreur chargement counts:', error);
   }
 }
+
+
+    async logout() {
+    await this.supabaseService.logout();
+    this.router.navigate(['/login']);
+  }
 
 
 

@@ -23,10 +23,18 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class AddAffectationDialog implements OnInit {
 
-  affectation: any = {
-    date_debut: '',
-    date_fin: '',
-  };
+affectation: any = {
+  agent_id: null,
+  site_id: null,
+  date_debut: '',
+  date_fin: null,
+
+  type_service: 'jour',          // ✅ valeur par défaut
+  type_affectation: 'fixe',      // ✅ valeur par défaut
+
+  status: true
+};
+
   agents: Agent[] = [];
   sites: Site[] = [];
   loading = false;
@@ -43,18 +51,24 @@ export class AddAffectationDialog implements OnInit {
 
 async ngOnInit() {
   try {
-    this.agents = await this.supabaseService.getAgents();
     this.sites = await this.supabaseService.getSites();
 
     if (this.data) {
       this.affectation = {
-        id: this.data.id,
-        agent_id: this.data.agent_id ?? this.data.agent?.id,
-        site_id: this.data.site_id ?? this.data.site?.id,
-        date_debut: this.data.date_debut?.substring(0, 10) ?? '',
-        date_fin: this.data.date_fin?.substring(0, 10) ?? '',
-        status: this.data.status ?? true
-      };
+  id: this.data.id,
+  agent_id: this.data.agent_id ?? this.data.agent?.id,
+  site_id: this.data.site_id ?? this.data.site?.id,
+
+  date_debut: this.data.date_debut?.substring(0, 10) ?? '',
+  date_fin: this.data.date_fin?.substring(0, 10) ?? null,
+
+  type_service: this.data.type_service ?? 'jour',
+  type_affectation: this.data.type_affectation ?? 'fixe',
+  observation: this.data.observation ?? '',
+
+  status: this.data.status ?? true
+};
+
     }
 
     // 🔥 LA LIGNE QUI FIX TOUT
@@ -80,25 +94,35 @@ async ngOnInit() {
     try {
       if (this.affectation.id) {
         // 🔁 MODIFICATION
-        await this.supabaseService.updateAffectation(
-          this.affectation.id,
-          {
-            agent_id: this.affectation.agent_id,
-            site_id: this.affectation.site_id,
-            date_debut: this.affectation.date_debut,
-            date_fin: this.affectation.date_fin || null,
-          }
-        );
+await this.supabaseService.updateAffectation(
+  this.affectation.id,
+  {
+    agent_id: this.affectation.agent_id,
+    site_id: this.affectation.site_id,
+    date_debut: this.affectation.date_debut,
+    date_fin: this.affectation.date_fin || null,
+
+    type_service: this.affectation.type_service,
+    type_affectation: this.affectation.type_affectation,
+  }
+);
+
+
         this.showToast('Affectation modifiée avec succès !', 'success');
       } else {
         // ➕ NOUVELLE AFFECTATION
-        await this.supabaseService.addAffectation({
-          agent_id: this.affectation.agent_id,
-          site_id: this.affectation.site_id,
-          date_debut: this.affectation.date_debut,
-          date_fin: this.affectation.date_fin || null,
-          status: true
-        });
+        console.log('Objet envoyé à Supabase:', this.affectation);
+await this.supabaseService.addAffectation({
+  agent_id: this.affectation.agent_id,
+  site_id: this.affectation.site_id,
+  date_debut: this.affectation.date_debut,
+  date_fin: this.affectation.date_fin || null,
+  status: true,
+  type_service: this.affectation.type_service,
+  type_affectation: this.affectation.type_affectation
+});
+
+
         this.showToast('Affectation ajoutée avec succès !', 'success');
 
         // 🔥 Mettre le status de l’agent à true

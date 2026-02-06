@@ -1,0 +1,62 @@
+<div class="scan-container">
+
+  <!-- BOUTON MENU UTILISATEUR -->
+  <div class="user-menu">
+    <button mat-button [matMenuTriggerFor]="userMenu" class="user-btn">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item>
+        <mat-icon>person</mat-icon>
+        <span>Profil</span>
+      </button>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Déconnexion</span>
+      </button>
+    </mat-menu>
+  </div>
+
+  <h2 class="title">Scanner un QR Code</h2>
+
+  <!-- BOUTON POUR LANCER LE SCANNER -->
+  <div class="scanner-btn-wrapper" *ngIf="!scannerActive">
+    <button mat-raised-button class="scan-btn" color="primary" (click)="startScanner()">
+      <mat-icon>qr_code_scanner</mat-icon> Ouvrir le scanner
+    </button>
+  </div>
+
+  <!-- Scanner uniquement si activé -->
+  <div class="scanner-wrapper" *ngIf="scannerActive">
+    <zxing-scanner
+      [device]="selectedDevice"
+      (camerasFound)="onCamerasFound($event)"
+      (scanSuccess)="handleQrCodeResult($event)"
+      (permissionResponse)="onHasPermission($event)"
+    ></zxing-scanner>
+  </div>
+
+  <!-- Résultat et spinner -->
+  <div class="result" *ngIf="scannedResult || loading">
+    <p>Résultat du scan :</p>
+
+    <div class="spinner-container" *ngIf="loading">
+      <mat-progress-spinner mode="indeterminate" diameter="50"></mat-progress-spinner>
+      <span class="loading-text">Enregistrement en cours...</span>
+    </div>
+
+    <div class="scan-output" *ngIf="!loading">
+      <strong>{{ scannedResult }}</strong>
+      <button mat-raised-button color="accent" (click)="resetScanner()">
+        <mat-icon>refresh</mat-icon> Scanner à nouveau
+      </button>
+    </div>
+  </div>
+
+  <!-- Permission caméra -->
+  <div class="permission-msg" *ngIf="scannerActive && !hasPermission">
+    <p>Veuillez autoriser l’accès à la caméra pour scanner le QR.</p>
+  </div>
+
+</div>

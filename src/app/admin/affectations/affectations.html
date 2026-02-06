@@ -1,5 +1,6 @@
 <div class="affectations-container">
 
+  <!-- Card Header avec recherche -->
   <div class="card-header">
     <h3>GESTION DES AFFECTATIONS</h3>
     <div class="header-actions">
@@ -11,6 +12,7 @@
     </div>
   </div>
 
+  <!-- Toolbar avec titre et bouton ajouter -->
   <mat-toolbar color="primary" class="center-toolbar page-title">
     <span>LISTE DES AFFECTATIONS</span>
     <span class="toolbar-spacer"></span>
@@ -20,13 +22,19 @@
     </button>
   </mat-toolbar>
 
+  <!-- Card -->
   <mat-card>
-    <div class="table-wrapper" *ngIf="!loading; else loadingTemplate">
 
-      <table mat-table [dataSource]="affectations" class="mat-elevation-z8 full-table"
-        *ngIf="affectations.data.length > 0; else noDataTemplate">
+    <!-- Spinner -->
+    <div *ngIf="loading" class="spinner-container">
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </div>
 
-        <!-- Index -->
+    <!-- Table wrapper avec scroll horizontal -->
+    <div class="table-wrapper" *ngIf="!loading && affectations.data.length > 0">
+      <table mat-table [dataSource]="affectations" class="mat-elevation-z8 full-table">
+
+        <!-- N° -->
         <ng-container matColumnDef="index">
           <th mat-header-cell *matHeaderCellDef>N°</th>
           <td mat-cell *matCellDef="let a; let i = index">{{ i + 1 }}</td>
@@ -35,13 +43,13 @@
         <!-- Agent -->
         <ng-container matColumnDef="agent">
           <th mat-header-cell *matHeaderCellDef>AGENT</th>
-          <td mat-cell *matCellDef="let a">{{ a.agent_name || (a.agent?.first_name + ' ' + a.agent?.last_name) }}</td>
+          <td mat-cell *matCellDef="let a">{{ a.agent?.first_name + ' ' + a.agent?.last_name || a.agent_name }}</td>
         </ng-container>
 
         <!-- Site -->
         <ng-container matColumnDef="site">
           <th mat-header-cell *matHeaderCellDef>SITE</th>
-          <td mat-cell *matCellDef="let a">{{ a.site_name || a.site?.name }}</td>
+          <td mat-cell *matCellDef="let a">{{ a.site?.name || a.site_name }}</td>
         </ng-container>
 
         <!-- Date début -->
@@ -53,16 +61,13 @@
         <!-- Date fin -->
         <ng-container matColumnDef="date_fin">
           <th mat-header-cell *matHeaderCellDef>DATE FIN</th>
-          <td mat-cell *matCellDef="let a" [ngClass]="{'text-green': !a.date_fin}">
-            {{ a.date_fin ? (a.date_fin | date:'dd/MM/yyyy') : '-' }}
-          </td>
+          <td mat-cell *matCellDef="let a">{{ a.date_fin ? (a.date_fin | date:'dd/MM/yyyy') : '-' }}</td>
         </ng-container>
 
         <!-- Jours effectués -->
-        <ng-container matColumnDef="jours_effectues">
+        <ng-container matColumnDef="nb_jours">
           <th mat-header-cell *matHeaderCellDef>JOURS EFFECTUÉS</th>
-          <td mat-cell *matCellDef="let a">{{ getJoursEffectues(a) }}
-          </td>
+          <td mat-cell *matCellDef="let a">{{ a.nb_jours || '-' }}</td>
         </ng-container>
 
         <!-- Status -->
@@ -71,51 +76,50 @@
           <td mat-cell *matCellDef="let a">
             <span [style.color]="getStatus(a).color" style="font-weight: bold">
               {{ getStatus(a).text }}
-
             </span>
           </td>
         </ng-container>
 
+        <!-- Type service -->
+        <ng-container matColumnDef="type_service">
+          <th mat-header-cell *matHeaderCellDef>TYPE SERVICE</th>
+          <td mat-cell *matCellDef="let a">{{ a.type_service || '-' }}</td>
+        </ng-container>
 
-
-
-
+        <!-- Type affectation -->
+        <ng-container matColumnDef="type_affectation">
+          <th mat-header-cell *matHeaderCellDef>TYPE AFFECTATION</th>
+          <td mat-cell *matCellDef="let a">{{ a.type_affectation || '-' }}</td>
+        </ng-container>
 
         <!-- Actions -->
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>ACTIONS</th>
-          <td mat-cell *matCellDef="let a">
+          <td mat-cell *matCellDef="let a" class="mat-column-actions">
             <button mat-icon-button color="primary" (click)="openStopAffectationDialog(a)">
               <mat-icon>stop_circle</mat-icon>
             </button>
-
             <button mat-icon-button color="primary" (click)="openEditAffectationDialog(a)">
               <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="primary">
+              <mat-icon>visibility</mat-icon>
             </button>
           </td>
         </ng-container>
 
-        <!-- Header et row -->
+        <!-- Header et rows -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
       </table>
-
     </div>
-  </mat-card>
 
-  <!-- Spinner de chargement -->
-  <ng-template #loadingTemplate>
-    <div class="spinner-container">
-      <mat-spinner [diameter]="50"></mat-spinner>
-    </div>
-  </ng-template>
-
-  <!-- Message si pas de données -->
-  <ng-template #noDataTemplate>
-    <div class="no-data-message">
+    <!-- Message "aucune donnée" -->
+    <div *ngIf="!loading && affectations.data.length === 0" class="no-data-message">
       Aucune affectation disponible.
     </div>
-  </ng-template>
+
+  </mat-card>
 
 </div>

@@ -1,0 +1,62 @@
+<div class="control-container">
+      <div class="card-header">
+    <h3>GESTION DES AGENTS</h3>
+
+    <div class="header-actions">
+      <mat-form-field appearance="fill" class="search-field">
+        <mat-label>Rechercher...</mat-label>
+        <input matInput>
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+    </div>
+  </div>
+
+  <mat-toolbar color="primary" class="center-toolbar page-title">
+    <span>Contrôle des présences</span>
+  </mat-toolbar>
+
+  <mat-card>
+    <div class="filter-section">
+
+      <mat-form-field appearance="fill" style="margin-right: 15px;">
+        <mat-label>Agent</mat-label>
+        <mat-select [(ngModel)]="selectedAgent">
+          <mat-option *ngFor="let agent of agents" [value]="agent">
+            {{ agent.first_name }} {{ agent.last_name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" style="margin-right: 15px;">
+        <mat-label>Mois</mat-label>
+        <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" placeholder="Choisir un mois">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker startView="multi-year" (monthSelected)="chosenMonthHandler($event, picker)" panelClass="month-picker"></mat-datepicker>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" (click)="showPresence()" [disabled]="!selectedAgent || !selectedDate">
+        Afficher
+      </button>
+
+    </div>
+
+    <div class="presence-summary" *ngIf="presenceDays.length > 0" style="margin-top:15px;">
+      <strong>Jours présents : {{ totalPresentDays }} ({{ getPresencePercentage() }}%)</strong>
+    </div>
+
+    <div class="calendar-section" *ngIf="presenceDays && presenceDays.length > 0" style="margin-top:15px;">
+      <div class="day" *ngFor="let day of presenceDays" [ngClass]="day.present ? 'present' : 'absent'">
+        {{ day.date | date:'dd' }}
+      </div>
+    </div>
+
+    <ng-template #noDataTemplate>
+      <div class="no-data-message">
+        Aucun enregistrement pour cet agent ce mois-ci.
+      </div>
+    </ng-template>
+
+  </mat-card>
+
+</div>

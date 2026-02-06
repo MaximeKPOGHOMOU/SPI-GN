@@ -1,0 +1,73 @@
+.scan-container {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+}
+
+.title {
+  margin-bottom: 20px;
+  color: #1976d2;
+  font-weight: 500;
+}
+
+.user-menu {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.scanner-btn-wrapper {
+  margin-bottom: 20px;
+}
+
+.scanner-wrapper {
+  margin-bottom: 20px;
+  border: 2px dashed #1976d2;
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.result {
+  margin-top: 20px;
+}
+
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #1976d2;
+  font-weight: 500;
+}
+
+.loading-text {
+  font-size: 16px;
+}
+
+.scan-output {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+button.mat-raised-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+}
+
+.permission-msg {
+  margin-top: 15px;
+  color: #d32f2f;
+  font-weight: 500;
+}
+.scan-btn {
+  background: var(--primary-gradient);
+}

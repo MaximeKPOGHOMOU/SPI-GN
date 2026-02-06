@@ -41,34 +41,61 @@ export class Sites implements OnInit {
   sites = new MatTableDataSource<Site>(); // datasource de la table
   displayedColumns: string[] = ['index', 'name', 'adresse', 'telephone', 'client_id', 'actions'];
   loading = true; // affiche spinner pendant le chargement
+  qrImageUrl: string | null = null;
+  selectedSiteForQr: Site | null = null;
+
 
   constructor(
     private supabaseService: SupabaseService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   async ngOnInit() {
     await this.loadSites();
     this.cdr.detectChanges();
   }
 
-  // 🔹 Charger les sites depuis Supabase
-async loadSites() {
-  this.loading = true;  // start spinner
-  try {
-    const data = await this.supabaseService.getSites(); 
-    this.sites.data = data;   // assign data
-    this.cdr.detectChanges(); // 🔹 force Angular à mettre à jour le DOM
-  } catch (err) {
-    console.error('Erreur loadSites:', err);
-    this.showToast('Impossible de charger les sites', 'error');
-  } finally {
-    this.loading = false;     // stop spinner
-    this.cdr.detectChanges(); // 🔹 assure que spinner disparaît
+  generateQrForSite(site: Site) {
+    if (!site.id) {
+      this.showToast('ID du site introuvable', 'error');
+      return;
+    }
+
+    const qrContent = site.id.toString(); // ID numérique
+    this.qrImageUrl =
+      'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' +
+      encodeURIComponent(qrContent);
+
+    this.selectedSiteForQr = site;
   }
-}
+
+  downloadQr() {
+    if (!this.qrImageUrl || !this.selectedSiteForQr) return;
+
+    const link = document.createElement('a');
+    link.href = this.qrImageUrl;
+    link.download = `qr-site-${this.selectedSiteForQr.id}.png`;
+    link.click();
+  }
+
+
+  // 🔹 Charger les sites depuis Supabase
+  async loadSites() {
+    this.loading = true;  // start spinner
+    try {
+      const data = await this.supabaseService.getSites();
+      this.sites.data = data;   // assign data
+      this.cdr.detectChanges(); // 🔹 force Angular à mettre à jour le DOM
+    } catch (err) {
+      console.error('Erreur loadSites:', err);
+      this.showToast('Impossible de charger les sites', 'error');
+    } finally {
+      this.loading = false;     // stop spinner
+      this.cdr.detectChanges(); // 🔹 assure que spinner disparaît
+    }
+  }
 
 
   // 🔹 Filtrer les sites par recherche
@@ -78,24 +105,30 @@ async loadSites() {
   }
 
   // 🔹 Ouvrir la boîte de dialogue pour ajouter un site
-  openAddSiteDialog() {
-    const dialogRef = this.dialog.open(AddSiteDialog, { width: '450px', panelClass: 'custom-dialog-container' });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) this.loadSites();
-    });
-  }
+openAddSiteDialog() {
+  const dialogRef = this.dialog.open(AddSiteDialog, { width: '450px', panelClass: 'custom-dialog-container' });
+  dialogRef.afterClosed().subscribe((result: Site) => {
+    if (result) {
+      this.loadSites();              // recharge la table
+      this.generateQrForSite(result); // génère le QR
+    }
+  });
+}
 
-  // 🔹 Ouvrir la boîte de dialogue pour modifier un site
-  openEditSiteDialog(site: Site) {
-    const dialogRef = this.dialog.open(AddSiteDialog, {
-      width: '450px',
-      data: site,
-      panelClass: 'custom-dialog-container'
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) this.loadSites();
-    });
-  }
+openEditSiteDialog(site: Site) {
+  const dialogRef = this.dialog.open(AddSiteDialog, {
+    width: '450px',
+    data: site,
+    panelClass: 'custom-dialog-container'
+  });
+  dialogRef.afterClosed().subscribe((result: Site) => {
+    if (result) {
+      this.loadSites();
+      this.generateQrForSite(result); // QR mis à jour
+    }
+  });
+}
+
 
   // 🔹 Supprimer un site
   async deleteSite(id?: string) {

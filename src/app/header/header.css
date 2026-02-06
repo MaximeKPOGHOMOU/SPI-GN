@@ -2,3 +2,18 @@
     background-color: white;
     align-items: center;
 }
+
+.ml-auto {
+  margin-left: auto;
+}
+
+.user-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 500;
+}
+
+.user-btn i {
+  font-size: 20px;
+}

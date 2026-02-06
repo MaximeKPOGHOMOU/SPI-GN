@@ -82,3 +82,20 @@
   background-clip: text;
   color: transparent;
 }
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  margin-right: 20px;
+}
+
+
+
+

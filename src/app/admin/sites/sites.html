@@ -72,9 +72,12 @@
             <button mat-icon-button color="primary" (click)="openEditSiteDialog(s)">
               <mat-icon>edit</mat-icon>
             </button>
-            <!-- <button mat-icon-button color="warn" (click)="deleteSite(s.id)">
-              <mat-icon>delete</mat-icon>
-            </button> -->
+            <button mat-icon-button color="primary" (click)="downloadQr()">
+              <mat-icon>download</mat-icon>
+            </button>
+            
+          </td>
+          <td mat-cell *matCellDef="let s">
           </td>
         </ng-container>
 
@@ -101,5 +104,6 @@
       Aucun site disponible.
     </div>
   </ng-template>
+
 
 </div>

@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
+import { AuthUser, createClient, SupabaseClient, User } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
 import { Agent } from '../models/agent';
 import { Client } from '../models/client';
 import { Site } from '../models/site';
 import { Equipement } from '../models/equipement';
-import { Dotations } from '../admin/dotations/dotations';
 import { Dotation } from '../models/dotation';
 import { Affectation } from '../models/affectation';
+import { Utilisateur } from '../models/utilsateur';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +16,8 @@ import { Affectation } from '../models/affectation';
 export class SupabaseService {
 
   private supabase: SupabaseClient;
+  private currentUser: Utilisateur | null = null;
+
 
 
 
@@ -28,19 +30,8 @@ export class SupabaseService {
   // AGENTS
   // ==================
 
-  /**
-   * Récupère tous les agents depuis la table 'agents'
-   * @returns Liste d'agents
-   */
 
-  async getAgents(): Promise<Agent[]> {
-    const { data, error } = await this.supabase.from('agents').select('*');
-    if (error) {
-      console.error(error);
-      return [];
-    }
-    return data || [];
-  }
+
 
 
   /**
@@ -73,10 +64,51 @@ export class SupabaseService {
    * Ajoute un nouvel agent dans la base
    * @param agent Agent à ajouter
    */
-  async addAgent(agent: any) {
-    const { data, error } = await this.supabase.from('agents').insert([agent]);
+ /** Ajouter un agent (crée aussi l'utilisateur Supabase Auth) */
+  async addAgent(agent: Agent, password: string = 'Temp1234!') {
+    if (!agent.first_name || !agent.last_name || !agent.telephone || !agent.adresse) {
+      throw new Error('Tous les champs sont requis');
+    }
+
+    // 1️⃣ Créer l'utilisateur Supabase Auth
+    const { data: authData, error: authError } = await this.supabase.auth.signUp({
+      email: `${agent.telephone}@example.com`, // email fictif pour agent
+      password
+    });
+
+    if (authError) throw authError;
+    const userId = authData.user?.id;
+    if (!userId) throw new Error('Impossible de récupérer l’ID utilisateur');
+
+    // 2️⃣ Créer le profil dans la table users
+    const { data, error } = await this.supabase
+      .from('users')
+      .insert([{
+        id: userId,
+        first_name: agent.first_name,
+        last_name: agent.last_name,
+        telephone: agent.telephone,
+        adresse: agent.adresse,
+        matricule: agent.matricule,
+        role: 'agent',
+        type: 'staff',
+        status: true
+      }]);
+
     if (error) throw error;
-    return data;
+    return data?.[0] ?? null;
+
+  }
+
+    async getAgents() {
+    const { data, error } = await this.supabase
+      .from('users')
+      .select('*')
+      .in('role', ['agent', 'direction', 'superviseur']) 
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data as Agent[];
   }
 
   /**
@@ -219,11 +251,47 @@ export class SupabaseService {
   }
 
 
-  async addSite(site: Site) {
-    const { data, error } = await this.supabase.from('sites').insert([site]);
-    if (error) throw error;
-    return data;
-  }
+// Ajouter un site et retourner l'ID numérique
+async addSite(site: Site) {
+  const { data, error } = await this.supabase.from('sites').insert([site]).select().single();
+  if (error) throw error;
+  return data; // renvoie l’objet complet avec l’ID généré
+}
+
+
+
+    // 🔹 Enregistrer un scan de présence
+// async insertScan(agentId: number, siteId: number) {
+//   if (!agentId || !siteId) {
+//     throw new Error('agentId ou siteId manquant');
+//   }
+
+
+//   const { data, error } = await this.supabase
+//     .from('presences')
+//     .insert([{
+//       agent_id: Number(agentId),
+//       site_id: Number(siteId)
+//     }]);
+
+//   if (error) throw error;
+//   return data;
+// }
+
+async insertScan(userId: string, siteId: number) {
+  if (!userId || !siteId) throw new Error('userId ou siteId manquant');
+
+  const { data, error } = await this.supabase
+    .from('presences')
+    .insert([{ user_id: userId, site_id: siteId }]);
+
+  if (error) throw error;
+  return data;
+}
+
+
+
+
 
   async updateSite(id: string, site: Site & { client?: any; client_name?: string }) {
     // Ne garder que les champs valides pour la table
@@ -481,37 +549,64 @@ async addAffectation(affectation: Omit<Affectation, 'id'>) {
     if (err2) throw err2;
   }
 
-  // 3️⃣ Ajouter la nouvelle affectation avec date_debut et éventuellement date_fin
-  const { data, error } = await this.supabase
+  // 3️⃣ Insérer la nouvelle affectation avec tous les champs
+  const { data: newAffectation, error: err3 } = await this.supabase
     .from('affectations')
     .insert([{
       agent_id: affectation.agent_id,
       site_id: affectation.site_id,
       date_debut: affectation.date_debut,
       date_fin: affectation.date_fin || null,
-      status: true, // nouvelle affectation = active
+      status: affectation.status ?? true,
+      type_service: affectation.type_service ?? 'jour',
+      type_affectation: affectation.type_affectation ?? 'fixe',
     }]);
 
-  if (error) throw error;
-  return data;
+  if (err3) throw err3;
+
+  return newAffectation;
 }
 
 /**
  * Termine l'affectation en cours d'un agent
+/**
+ * Stop une affectation et calcule le nombre de jours
  * @param agentId ID de l'agent
  * @param dateFin Optionnel, date de fin personnalisée
  */
 async stopAffectation(agentId: number, dateFin?: Date) {
+
+  const fin = dateFin ?? new Date();
+
+  // 1️⃣ Récupérer l'affectation en cours
+  const { data: affectation, error: fetchError } = await this.supabase
+    .from('affectations')
+    .select('id, date_debut')
+    .eq('agent_id', agentId)
+    .is('date_fin', null)
+    .single();
+
+  if (fetchError) throw fetchError;
+
+  // 2️⃣ Calcul du nombre de jours
+  const debut = new Date(affectation.date_debut);
+  const diffTime = fin.getTime() - debut.getTime();
+
+  // +1 si tu veux compter le jour de début
+  const nbJours = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  // 3️⃣ Mise à jour
   const { data, error } = await this.supabase
     .from('affectations')
-    .update({ 
-      date_fin: dateFin ? dateFin.toISOString() : new Date().toISOString(),
-      status: false // on met le status à false
+    .update({
+      date_fin: fin.toISOString(),
+      status: false,
+      nb_jours: nbJours
     })
-    .eq('agent_id', agentId)
-    .is('date_fin', null); // uniquement l'affectation en cours
+    .eq('id', affectation.id);
 
   if (error) throw error;
+
   return data;
 }
 
@@ -554,7 +649,7 @@ async getAffectations(): Promise<Affectation[]> {
  */
 async updateAffectation(
   id: string,
-  affectation: Partial<Pick<Affectation, 'agent_id' | 'site_id' | 'date_debut' | 'date_fin' | 'status'>>
+  affectation: Partial<Affectation> // <-- accepte tous les champs
 ) {
   const { data, error } = await this.supabase
     .from('affectations')
@@ -565,27 +660,33 @@ async updateAffectation(
   return data;
 }
 
-  // Login et récupération du profil métier
-  async login(email: string, password: string): Promise<User> {
-    // 1️⃣ Connexion via Supabase Auth
-    const { data, error } = await this.supabase.auth.signInWithPassword({ email, password });
-    if (error) throw error;
 
-    const authUser = data.user;
-    if (!authUser) throw new Error('Utilisateur non trouvé');
+async login(email: string, password: string): Promise<Utilisateur> {
+  // 🔹 Connexion via Supabase Auth
+  const { data: authData, error: authError } = await this.supabase.auth.signInWithPassword({ email, password });
+  if (authError || !authData.user) throw authError;
 
-    // 2️⃣ Récupérer le profil complet depuis la table `users`
-    const { data: userData, error: userError } = await this.supabase
-      .from('users')
-      .select('*')
-      .eq('id', authUser.id)
-      .single();
+  const authUser = authData.user;
 
-    if (userError || !userData) throw userError || new Error('Profil non trouvé');
+  // 🔹 Récupérer le profil depuis la table users
+  const { data: profile, error: profileError } = await this.supabase
+    .from('users')
+    .select('*')
+    .eq('id', authUser.id)
+    .maybeSingle(); // ✅ évite l'erreur "Cannot coerce"
 
-    // 3️⃣ Cast explicite vers ton interface User
-    return userData as User;
-  }
+  if (profileError) throw profileError;
+  if (!profile) throw new Error('Utilisateur non trouvé');
+
+  const utilisateur: Utilisateur = profile as Utilisateur;
+
+  // 🔹 Vérifier le rôle
+  // 🔹 Stocker localement
+  localStorage.setItem('user', JSON.stringify(utilisateur));
+  this.currentUser = utilisateur;
+
+  return utilisateur;
+}
 
   // Déconnexion
   async logout() {
@@ -611,5 +712,54 @@ async updateAffectation(
     if (!data.session?.user) return null;
     return this.getUserProfile(data.session.user.id);
   }
+
+  // Récupérer le user connecté
+async getCurrentUser(): Promise<Utilisateur | null> {
+  // 1️⃣ Récupère la session
+  const { data: sessionData, error: sessionError } = await this.supabase.auth.getSession();
+
+  if (sessionError) {
+    console.error('Erreur session Supabase:', sessionError);
+    return null;
+  }
+
+  // 2️⃣ Vérifie que sessionData et session existent
+  if (!sessionData || !sessionData.session || !sessionData.session.user) {
+    console.warn('Aucun utilisateur connecté');
+    return null;
+  }
+
+  const userId = sessionData.session.user.id;
+
+  // 3️⃣ Récupère le profil dans la table `users`
+  const { data, error } = await this.supabase
+    .from('users')
+    .select('*')
+    .eq('id', userId)
+    .single();
+
+  if (error) {
+    console.error('Erreur getCurrentUser:', error);
+    return null;
+  }
+
+  return data as Utilisateur;
+}
+
+async getPresenceByMonth(agentId: number, month: number, year: number) {
+  const { data, error } = await this.supabase
+    .from('presences')
+    .select('*')
+    .eq('agent_id', agentId)
+    .gte('scan_time', `${year}-${month}-01`)
+    .lte('scan_time', `${year}-${month}-${new Date(year, month, 0).getDate()}`);
+
+  if (error) {
+    console.error('Erreur Supabase:', error);
+    return [];
+  }
+  return data;
+}
+
 
 }

@@ -38,7 +38,7 @@ export class AddSiteDialog implements OnInit {
     client_id: '',
     name: '',
     adresse: '',
-    telephone: '',  
+    telephone: '',
   };
 
   constructor(
@@ -67,35 +67,34 @@ export class AddSiteDialog implements OnInit {
     }
   }
 
-// Ajouter ou modifier le site
-async addSite() {
-  if (!this.newSite.client_id || !this.newSite.name || !this.newSite.adresse) {
-    this.showToast('Veuillez remplir tous les champs', 'error');
-    return;
-  }
-
-  this.loading = true; // démarre le spinner
-
-  try {
-    if (this.newSite.id) {
-      await this.supabaseService.updateSite(this.newSite.id, this.newSite);
-      this.showToast('Site modifié avec succès !', 'success');
-    } else {
-      await this.supabaseService.addSite(this.newSite);
-      this.showToast('Site ajouté avec succès !', 'success');
+  // Ajouter ou modifier le site
+  async addSite() {
+    if (!this.newSite.client_id || !this.newSite.name || !this.newSite.adresse) {
+      this.showToast('Veuillez remplir tous les champs', 'error');
+      return;
     }
 
-    // 🔹 Arrête le spinner avant de fermer le dialog
-    this.loading = false;
+    this.loading = true;
 
-    this.dialogRef.close(true); // maintenant le dialog se ferme après que le spinner s'arrête
-
-  } catch (err) {
-    console.error('Erreur ajout/modification site :', err);
-    this.showToast('Impossible de sauvegarder le site', 'error');
-    this.loading = false; // s'assurer que le spinner s'arrête en cas d'erreur
+    try {
+      if (this.newSite.id) {
+        await this.supabaseService.updateSite(this.newSite.id, this.newSite);
+        this.showToast('Site modifié avec succès !', 'success');
+        this.dialogRef.close(this.newSite); // 🔹 renvoie le site modifié
+      } else {
+        const createdSite = await this.supabaseService.addSite(this.newSite);
+        this.showToast('Site ajouté avec succès !', 'success');
+        this.dialogRef.close(createdSite); // 🔹 renvoie l’objet créé
+      }
+    } catch (err) {
+      console.error(err);
+      this.showToast('Impossible de sauvegarder le site', 'error');
+    } finally {
+      this.loading = false;
+    }
   }
-}
+
+
 
   close() {
     this.dialogRef.close(false);

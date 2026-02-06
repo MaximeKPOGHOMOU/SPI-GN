@@ -251,3 +251,26 @@ mat-form-field.search-field {
 .status-text.inactif {
   color: red;
 }
+/* ================= HEADER FIXE ================= */
+th.mat-mdc-header-cell {
+  position: sticky;
+  top: 0;
+  font-weight: 600;
+  text-transform: uppercase;
+  z-index: 3;
+}
+/* 🔥 Forcer comportement table */
+tr.mat-mdc-header-row,
+tr.mat-mdc-row {
+  display: table-row !important;
+}
+
+th.mat-mdc-header-cell,
+td.mat-mdc-cell,
+td.mat-cell {
+  display: table-cell !important;
+  padding: 10px 8px;
+  font-size: 0.95rem;
+  vertical-align: middle;
+  white-space: nowrap; /* 🔥 empêche affichage en colonne */
+}

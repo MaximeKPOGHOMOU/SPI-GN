@@ -1,17 +1,32 @@
-/* Global */
-.login-wrapper {
+/* ================= PAGE ================= */
+.login-page {
   height: 100vh;
-  display: flex;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-/* FORMULAIRE */
-.login-form-section {
-  flex: 1;
-  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: #f4f6f9;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ================= CARD ================= */
+.login-card {
+  width: 900px;
+  max-width: 95%;
+  height: 500px;
+  display: flex;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+}
+
+/* ================= FORM ================= */
+.login-form-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
 }
 
 .login-form {
@@ -22,7 +37,9 @@
 .login-form h2 {
   font-size: 28px;
   margin-bottom: 6px;
-  color:var(--primary-gradient);
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .subtitle {
@@ -54,10 +71,10 @@
 .login-btn {
   width: 100%;
   padding: 14px;
-  background: var(--primary-gradient);;
+  background: var(--primary-gradient);
   border: none;
   border-radius: 10px;
-  color: white;
+  color: #fff;
   font-weight: 600;
   cursor: pointer;
   transition: 0.3s;
@@ -76,7 +93,7 @@
   text-align: center;
 }
 
-/* IMAGE */
+/* ================= IMAGE ================= */
 .login-image-section {
   flex: 1;
   background-image: url('/assets/images/agent_3.jpeg');
@@ -92,7 +109,7 @@
   background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6));
 }
 
-/* Overlay text */
+/* Overlay */
 .overlay {
   position: relative;
   z-index: 1;
@@ -115,13 +132,17 @@
   opacity: 0.85;
 }
 
-/* Responsive */
+/* ================= RESPONSIVE ================= */
 @media (max-width: 900px) {
+  .login-card {
+    height: auto;
+  }
+
   .login-image-section {
     display: none;
   }
 
   .login-form-section {
-    flex: 1;
+    padding: 30px;
   }
 }

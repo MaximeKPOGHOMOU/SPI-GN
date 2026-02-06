@@ -29,10 +29,23 @@
       <input matInput [(ngModel)]="newAgent.adresse">
     </mat-form-field>
   </div>
+  
+  <!-- Role + Site -->
+  <div class="form-row">
+    <mat-form-field class="flex-field" appearance="fill">
+      <mat-label>Rôle</mat-label>
+      <mat-select [(ngModel)]="newAgent.role">
+        <mat-option value="agent">Agent</mat-option>
+        <mat-option value="direction">Direction</mat-option>
+      </mat-select>
+    </mat-form-field>
 
+  </div>
 
+  <!-- Actions -->
   <div class="dialog-actions">
     <button mat-raised-button color="primary" (click)="addAgent()" [disabled]="loading" class="btn-with-spinner">
+      <mat-progress-spinner *ngIf="loading" mode="indeterminate" diameter="20" color="accent"></mat-progress-spinner>
       <span class="btn-text">
         {{ loading ? (newAgent.id ? 'Modification en cours...' : 'Ajout en cours...')
         : (newAgent.id ? 'Modifier' : 'Ajouter') }}
@@ -43,6 +56,5 @@
       Annuler
     </button>
   </div>
-
 
 </div>

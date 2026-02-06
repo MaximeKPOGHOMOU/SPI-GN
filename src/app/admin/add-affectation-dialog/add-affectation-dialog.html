@@ -33,11 +33,25 @@
     <input matInput [(ngModel)]="affectation.date_debut" type="date" name="date_debut">
   </mat-form-field>
 
-  <!-- Date fin -->
-  <mat-form-field appearance="fill">
-    <mat-label>Date fin</mat-label>
-    <input matInput [(ngModel)]="affectation.date_fin" type="date">
-  </mat-form-field>
+<mat-form-field appearance="fill">
+  <mat-label>Type de service</mat-label>
+  <mat-select [(ngModel)]="affectation.type_service" name="type_service">
+    <mat-option value="jour">Jour</mat-option>
+    <mat-option value="nuit">Nuit</mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field appearance="fill">
+  <mat-label>Type d'affectation</mat-label>
+  <mat-select [(ngModel)]="affectation.type_affectation" name="type_affectation">
+    <mat-option value="fixe">Fixe</mat-option>
+    <mat-option value="temporaire">Temporaire</mat-option>
+  </mat-select>
+</mat-form-field>
+
+
+
+
 </div>
 
 

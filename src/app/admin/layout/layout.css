@@ -3,13 +3,29 @@
   height: 100vh;
 }
 
-app-sidebar{
-  width: 250px;
-}
 
 .content{
   flex: 1;
   padding: 0 ;
   background: #f5f7fa;
   overflow: auto;
+}
+.layout-container {
+  display: flex;
+  height: 100vh; /* pleine hauteur de la fenêtre */
+}
+
+/* Sidebar fixe à gauche */
+app-sidebar {
+  width: 250px;      /* largeur du menu */
+  min-width: 250px;
+  background-color: #fafafa;
+  overflow-y: auto;
+}
+
+/* Contenu principal à côté de la sidebar */
+.main-content {
+  flex: 1;           /* prend tout l'espace restant */
+  padding: 20px;
+  overflow-y: auto;
 }

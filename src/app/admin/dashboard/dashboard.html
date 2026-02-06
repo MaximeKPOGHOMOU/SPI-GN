@@ -1,9 +1,28 @@
-<h1 class="dashboard-title">Tableau de bord</h1>
-<div class="dashboard-container">
-
+<div class="dashboard-header d-flex justify-content-between align-items-center mb-4">
   <!-- TITRE -->
+  <h1 class="dashboard-title">Tableau de bord</h1>
 
-  <!-- BLOCS -->
+  <!-- BOUTON MENU UTILISATEUR -->
+  <div class="user-menu">
+    <button mat-button [matMenuTriggerFor]="userMenu" class="user-btn">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item >
+        <mat-icon>person</mat-icon>
+        <span>Profil</span>
+      </button>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Déconnexion</span>
+      </button>
+    </mat-menu>
+  </div>
+</div>
+
+<!-- BLOCS DU DASHBOARD -->
+<div class="dashboard-container d-flex flex-wrap">
   <div class="dashboard-block" style="--left-border-gradient: linear-gradient(135deg, #1976d2, #42a5f5)">
     <div class="block-content">
       <h2>{{ agentsCount }}</h2>
@@ -31,5 +50,4 @@
       <p>Dotations</p>
     </div>
   </div>
-
 </div>

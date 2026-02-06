@@ -34,12 +34,12 @@ export class StopAffectationDialog {
 
 async confirm() {
   if (!this.date_fin) {
-    this.snackBar.open('Veuillez saisir la date de fin', 'OK', { duration: 3000 });
+    this.showToast(`Veuillez saisir la date de fin`, 'error');
     return;
   }
 
   if (this.date_fin < this.affectation.date_debut) {
-    this.snackBar.open('La date de fin doit être ≥ date début', 'OK', { duration: 3000 });
+      this.showToast(`La date de fin doit être ≥ date début`, 'error');
     return;
   }
 
@@ -47,7 +47,8 @@ async confirm() {
     // 1️⃣ Arrêter l’affectation
     await this.supabaseService.stopAffectation(
       Number(this.affectation.agent_id),
-      new Date(this.date_fin)
+      new Date(this.date_fin),
+      
     );
 
     // 2️⃣ 🔥 METTRE À JOUR LE STATUS DE L’AGENT
@@ -56,14 +57,23 @@ async confirm() {
       false
     );
 
-    this.snackBar.open('Affectation arrêtée avec succès', 'OK', { duration: 3000 });
+    this.showToast(`Affectation arrêtée avec succès`, 'success');
     this.dialogRef.close(true);
 
   } catch (err) {
     console.error(err);
-    this.snackBar.open('Erreur lors de l’arrêt', 'OK', { duration: 3000 });
+    this.showToast('Erreur lors de l’arrêt', 'error');
   }
 }
+
+  showToast(message: string, type: 'success' | 'error' = 'success') {
+    this.snackBar.open(message, 'OK', {
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+      panelClass: type === 'success' ? ['snackbar-success'] : ['snackbar-error']
+    });
+  }
 
 
   cancel() {

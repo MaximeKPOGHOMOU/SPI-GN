@@ -10,24 +10,24 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { MatCard, MatCardModule } from "@angular/material/card";
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatProgressSpinner } from "@angular/material/progress-spinner";
+import { MatProgressSpinner, MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-add-agent-dialog',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatCardModule],
+  imports: [CommonModule, FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatCardModule, MatProgressSpinnerModule],
   templateUrl: './add-agent-dialog.html',
 })
 export class AddAgentDialog {
   sites: { id: string; name: string; client_name?: string }[] = [];
   loading = false;
   newAgent: Agent = {
-    first_name: '',
-    last_name: '',
-    telephone: '',
-    adresse: '',
-    matricule: '',
-    status: false,
+  first_name: '',
+  last_name: '',
+  telephone: '',
+  adresse: '',
+  matricule: '',
+  status: false,
   };
 
   constructor(

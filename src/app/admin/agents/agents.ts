@@ -42,10 +42,8 @@ export class Agents implements OnInit {
   // 🔹 PROPRIÉTÉS
   // ==================
   agents = new MatTableDataSource<Agent>();           // Source de données pour la table
-  displayedColumns: string[] = [                      // Colonnes affichées dans le tableau
-    'index', 'matricule', 'first_name', 'last_name', 'telephone',
-    'adresse', 'status', 'actions'
-  ];
+displayedColumns: string[] = ['index', 'matricule', 'first_name', 'last_name', 'telephone', 'adresse', 'role', 'status', 'actions'];
+
   loading = true;                                     // Indicateur de chargement
 
   // ==================
@@ -111,24 +109,6 @@ export class Agents implements OnInit {
       if (result) this.loadAgents();
     });
   }
-
-  /** Active/désactive le status d’un agent */
-  // async toggleStatus(agent: Agent, event: MatSlideToggleChange) {
-  //   if (!agent.id) return this.showToast('ID manquant', 'error');
-
-  //   const newStatus = event.checked;
-  //   try {
-  //     await this.supabaseService.updateAgentStatus(agent.id, newStatus);
-  //     agent.status = newStatus;
-  //     this.showToast(
-  //       `Agent ${agent.first_name} ${agent.last_name} est maintenant ${newStatus ? 'Actif' : 'Inactif'}`,
-  //       'success'
-  //     );
-  //   } catch (err) {
-  //     console.error(err);
-  //     this.showToast('Impossible de changer le status', 'error');
-  //   }
-  // }
 
   /** Supprime un agent */
   async deleteAgent(id: string) {

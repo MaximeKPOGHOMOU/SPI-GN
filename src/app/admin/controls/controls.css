@@ -46,12 +46,7 @@ mat-card h3 {
   gap: 10px;
 }
 
-/* Table styling */
-.table-wrapper {
-  width: 100%;
-  max-height: 400px; /* limite la hauteur visible de la table */
-  overflow-y: auto;  /* scroll vertical uniquement pour la table */
-}
+
 
 table {
   width: 100%;
@@ -181,7 +176,6 @@ button[mat-raised-button] mat-icon {
 }
 
 
-
 .full-table {
   width: 100%;
   min-width: 600px; /* optionnel, si tu veux un minimum pour les colonnes */
@@ -247,15 +241,14 @@ mat-form-field.search-field {
 .status-text.inactif {
   color: red;
 }
-/* ================= TABLE (FIX MDC) ================= */
-table.mat-mdc-table,
-table {
-  width: 100%;
-  min-width: 900px; /* 🔥 force largeur */
-  border-collapse: collapse;
-  table-layout: auto;
+/* ================= HEADER FIXE ================= */
+th.mat-mdc-header-cell {
+  position: sticky;
+  top: 0;
+  font-weight: 600;
+  text-transform: uppercase;
+  z-index: 3;
 }
-
 /* 🔥 Forcer comportement table */
 tr.mat-mdc-header-row,
 tr.mat-mdc-row {
@@ -271,11 +264,73 @@ td.mat-cell {
   vertical-align: middle;
   white-space: nowrap; /* 🔥 empêche affichage en colonne */
 }
-/* ================= HEADER FIXE ================= */
-th.mat-mdc-header-cell {
-  position: sticky;
-  top: 0;
+
+/* ================= CALENDRIER DE PRESENCE ================= */
+.calendar-section {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* 7 colonnes = 7 jours de la semaine */
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border-radius: 6px;
   font-weight: 600;
-  text-transform: uppercase;
-  z-index: 3;
+  cursor: default;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid #ddd;
+}
+
+.day.present {
+  background-color: #4caf50; /* vert */
+  color: white;
+  border: none;
+}
+
+.day.absent {
+  background-color: #f44336; /* rouge */
+  color: white;
+  border: none;
+}
+
+.day:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Ajouter les initiales des jours de la semaine en en-tête */
+.calendar-section::before {
+  content: "L M M J V S D"; /* ou ajuster selon langue */
+  grid-column: span 7;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #1976d2;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .calendar-section {
+    grid-template-columns: repeat(4, 1fr); /* réduit pour mobile */
+    gap: 6px;
+  }
+
+  .day {
+    height: 35px;
+    font-size: 0.85rem;
+  }
+}
+
+/* ================= FILTRE AGENT / MOIS ================= */
+.filter-section {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* <-- espace entre les champs */
+  flex-wrap: wrap; /* permet de passer à la ligne sur mobile si besoin */
+  margin-bottom: 20px;
 }

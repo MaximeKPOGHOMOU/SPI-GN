@@ -4,8 +4,11 @@ export interface Affectation {
   site_id: string;
   date_debut: string;
   date_fin?: string | null;
-  jours_effectues?: number;
+  nb_jours?: number;
   status?: boolean; // vrai = actif, faux = terminé
+
+  type_service?: 'jour' | 'nuit';
+  type_affectation?: 'fixe' | 'temporaire' | 'remplacement';
 
   // Pour l’affichage
   agent_name?: string; 
