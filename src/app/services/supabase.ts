@@ -65,80 +65,74 @@ export class SupabaseService {
    * @param agent Agent à ajouter
    */
  /** Ajouter un agent (crée aussi l'utilisateur Supabase Auth) */
-  async addAgent(agent: Agent, password: string = 'Temp1234!') {
-    if (!agent.first_name || !agent.last_name || !agent.telephone || !agent.adresse) {
-      throw new Error('Tous les champs sont requis');
-    }
+async addAgent(agent: Agent, password: string = 'Temp1234!') {
 
-    // 1️⃣ Créer l'utilisateur Supabase Auth
-    const { data: authData, error: authError } = await this.supabase.auth.signUp({
-      email: `${agent.telephone}@example.com`, // email fictif pour agent
+  if (!agent.first_name || !agent.last_name || !agent.telephone || !agent.adresse) {
+    throw new Error('Champs obligatoires manquants');
+  }
+
+  // 1️⃣ Création Auth
+  const { data: authData, error: authError } =
+    await this.supabase.auth.signUp({
+      email: `${agent.telephone}@example.com`,
       password
     });
 
-    if (authError) throw authError;
-    const userId = authData.user?.id;
-    if (!userId) throw new Error('Impossible de récupérer l’ID utilisateur');
+  if (authError) throw authError;
+  if (!authData.user) throw new Error('Utilisateur Auth non créé');
 
-    // 2️⃣ Créer le profil dans la table users
-    const { data, error } = await this.supabase
-      .from('users')
-      .insert([{
-        id: userId,
-        first_name: agent.first_name,
-        last_name: agent.last_name,
-        telephone: agent.telephone,
-        adresse: agent.adresse,
-        matricule: agent.matricule,
-        role: 'agent',
-        type: 'staff',
-        status: true
-      }]);
+  // 2️⃣ Insertion PROFIL
+  const { error } = await this.supabase
+    .from('users')
+    .insert([{
+      id: authData.user.id,
+      first_name: agent.first_name,
+      last_name: agent.last_name,
+      telephone: agent.telephone,
+      adresse: agent.adresse,
+      matricule: agent.matricule,
+      role: agent.role,          // 👈 AGENT / DIRECTION / SUPERVISEUR
+      status: true
+    }]);
 
-    if (error) throw error;
-    return data?.[0] ?? null;
+  if (error) throw error;
+}
 
-  }
 
-    async getAgents() {
-    const { data, error } = await this.supabase
-      .from('users')
-      .select('*')
-      .in('role', ['agent', 'direction', 'superviseur']) 
-      .order('created_at', { ascending: false });
 
-    if (error) throw error;
-    return data as Agent[];
-  }
+async getAgents() {
+  const { data, error } = await this.supabase
+    .from('users')
+    .select('*')
+    .in('role', ['agent', 'direction'])
+    .order('created_at', { ascending: false });
+
+  if (error) throw error;
+  return data as Agent[];
+}
 
   /**
    * Met à jour un agent existant
    * @param id ID de l'agent
    * @param agent Données à mettre à jour
    */
-  async updateAgent(id: string, agent: Agent) {
-    // Payload de base
-    const payload: any = {
+async updateAgent(id: string, agent: Agent) {
+  const { error } = await this.supabase
+    .from('users')   // ❗ PAS agents
+    .update({
       first_name: agent.first_name,
       last_name: agent.last_name,
       telephone: agent.telephone,
       adresse: agent.adresse,
+      role: agent.role,
       status: agent.status,
-    };
+      matricule: agent.matricule
+    })
+    .eq('id', id);
 
-    // Si le matricule est défini (nouveau ou recalculé), on l’inclut
-    if (agent.matricule) {
-      payload.matricule = agent.matricule;
-    }
+  if (error) throw error;
+}
 
-    const { data, error } = await this.supabase
-      .from('agents')
-      .update(payload)
-      .eq('id', id);
-
-    if (error) throw error;
-    return data;
-  }
 
 
   /**

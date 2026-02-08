@@ -32,13 +32,15 @@
   
   <!-- Role + Site -->
   <div class="form-row">
-    <mat-form-field class="flex-field" appearance="fill">
-      <mat-label>Rôle</mat-label>
-      <mat-select [(ngModel)]="newAgent.role">
-        <mat-option value="agent">Agent</mat-option>
-        <mat-option value="direction">Direction</mat-option>
-      </mat-select>
-    </mat-form-field>
+<mat-form-field appearance="fill" class="flex-field">
+  <mat-label>Rôle</mat-label>
+  <mat-select [(ngModel)]="newAgent.role">
+    <mat-option value="agent">Agent</mat-option>
+    <mat-option value="superviseur">Superviseur</mat-option>
+    <mat-option value="direction">Direction</mat-option>
+  </mat-select>
+</mat-form-field>
+
 
   </div>
 

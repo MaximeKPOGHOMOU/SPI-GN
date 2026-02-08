@@ -1,16 +1,13 @@
 export interface Utilisateur {
-    id?: string;
+  id?: string;
   first_name: string;
   last_name: string;
   telephone: string;
-  adresse?: string;       // 🔹 maintenant optionnel
-  matricule: string;
-  role?: 'agent' | 'superviseur' | 'operation' | 'direction' | 'client';
-  type?: 'staff';
+  adresse: string;
+  matricule?: string;
   status?: boolean;
-  site_id?: number;
+  role: 'agent' | 'superviseur' | 'direction';
+  type: 'staff' | 'client';
   created_at?: string;
-  site?: { id: number; name: string };
+  site?: { id: string; name: string };
 }
-
-

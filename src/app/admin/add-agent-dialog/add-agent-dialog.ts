@@ -21,14 +21,17 @@ import { MatProgressSpinner, MatProgressSpinnerModule } from "@angular/material/
 export class AddAgentDialog {
   sites: { id: string; name: string; client_name?: string }[] = [];
   loading = false;
-  newAgent: Agent = {
+newAgent: Agent = {
   first_name: '',
   last_name: '',
   telephone: '',
   adresse: '',
   matricule: '',
   status: false,
-  };
+  role: 'agent',  // <- obligatoire
+};
+
+
 
   constructor(
     private dialogRef: MatDialogRef<AddAgentDialog>,
@@ -36,8 +39,12 @@ export class AddAgentDialog {
     private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data?: Agent
   ) {
-    if (data) this.newAgent = { ...data };
+  if (data) {
+    this.newAgent = { ...data };
+  } else {
+    this.newAgent.role = 'agent'; // sécurité
   }
+}
 
   ngOnInit() {
     this.loadSites();
@@ -53,33 +60,22 @@ export class AddAgentDialog {
   }
 
 async addAgent() {
-  if (!this.newAgent.first_name || !this.newAgent.last_name ||
-      !this.newAgent.telephone ) {
+  if (!this.newAgent.first_name || !this.newAgent.last_name || !this.newAgent.telephone) {
     this.showToast('Veuillez remplir tous les champs', 'error');
     return;
   }
 
+  // ✅ décale le changement d'état
+  Promise.resolve().then(() => this.loading = true);
+
   try {
-    this.loading = true;
-
     if (this.newAgent.id) {
-      // ✅ Si prénom ou nom modifié, recalculer le matricule
-      const existingAgent = await this.supabaseService.getAgents();
-      const oldAgent = existingAgent.find(a => a.id === this.newAgent.id);
-
-      if (oldAgent && (oldAgent.first_name !== this.newAgent.first_name || oldAgent.last_name !== this.newAgent.last_name)) {
-        this.newAgent.matricule = await this.supabaseService.generateMatricule(
-          this.newAgent.first_name, this.newAgent.last_name
-        );
-      }
-
       await this.supabaseService.updateAgent(this.newAgent.id, this.newAgent);
       this.showToast('Agent modifié avec succès !', 'success');
-
     } else {
-      // ✅ Nouveau agent
       const matricule = await this.supabaseService.generateMatricule(
-        this.newAgent.first_name, this.newAgent.last_name
+        this.newAgent.first_name,
+        this.newAgent.last_name
       );
       this.newAgent.matricule = matricule;
 
@@ -90,10 +86,10 @@ async addAgent() {
     this.dialogRef.close(true);
 
   } catch (err) {
-    console.error('Erreur ajout/modification agent :', err);
+    console.error(err);
     this.showToast('Impossible de sauvegarder l’agent', 'error');
   } finally {
-    this.loading = false;
+    Promise.resolve().then(() => this.loading = false);
   }
 }
 
@@ -101,16 +97,16 @@ async addAgent() {
     this.dialogRef.close(false);
   }
 
-showToast(message: string, type: 'success' | 'error' = 'success') {
-  this.snackBar.open(message, 'OK', {
-    duration: 3000,
-    horizontalPosition: 'right',
-    verticalPosition: 'top',
-    panelClass: type === 'success'
-      ? ['snackbar-success']
-      : ['snackbar-error']
-  });
-}
+  showToast(message: string, type: 'success' | 'error' = 'success') {
+    this.snackBar.open(message, 'OK', {
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+      panelClass: type === 'success'
+        ? ['snackbar-success']
+        : ['snackbar-error']
+    });
+  }
 
 
 }

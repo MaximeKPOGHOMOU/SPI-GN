@@ -3,12 +3,8 @@ export interface Agent {
   first_name: string;
   last_name: string;
   telephone: string;
-  adresse?: string;       // 🔹 maintenant optionnel
-  matricule: string;
-  role?: 'agent';
-  type?: 'staff';
-  status?: boolean;
-  site_id?: number;
-  created_at?: string;
-  site?: { id: number; name: string };
+  adresse: string;
+  matricule?: string;
+  role: 'agent' | 'direction' | 'superviseur';
+  status: boolean;
 }
